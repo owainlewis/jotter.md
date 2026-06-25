@@ -2,213 +2,528 @@
 
 This file is the source plan for GitHub Issues.
 
-The live execution plan is the GitHub project board.
+The live execution plan can become a GitHub project board later.
+
+Each task is sized for one focused agent run, review, and rollback.
 
 ## Phases
 
-Phase 1: MVP runs locally.
+Phase 0: Repo planning and scaffolding.
 
-Phase 2: MVP deployed to GCP.
+Phase 1: Local anonymous MVP.
+
+Phase 2: Deployed anonymous MVP on GCP.
+
+Phase 3: Personal saved-doc product for Owain.
+
+Phase 4: Payments and public paid tier.
 
 ## Shared Decisions
 
 - Docs are Markdown only.
 - Anonymous docs stay browser-local.
-- Paid saved docs are stored in Postgres.
-- Saved docs are private by default.
+- Phase 1 has no auth, database, API, CLI, or billing.
+- Phase 2 deploys the anonymous app before persistence exists.
+- Phase 3 adds saved docs for Owain only.
+- Phase 4 adds Stripe and the public paid tier.
+- Saved docs are private by default once saved docs exist.
 - Public docs are available only through explicit unguessable share URLs.
-- Public V1 access is read-only for anyone with the URL.
+- Public shared docs are read-only for anyone with the URL.
+- Raw `.md` URLs are required once sharing exists.
 - `Ctrl+R` and `Cmd+R` switch between edit and view modes.
-- The CLI is part of V1.
+- The CLI is part of the saved-doc product, not the anonymous scratchpad.
 - The deployed target is GCP.
 
-## Phase 1 Issues
+## Phase 0 Issues
 
-### 1. Scaffold the monorepo and local developer workflow
+### 1. Scaffold the web app and developer workflow
 
-Goal: Create the initial application scaffold and local commands.
+Goal: Create the initial Next.js web app and local command path.
 
 Context: The repo currently starts docs-first.
 
 Relevant docs: `docs/prd.md`, `docs/architecture.md`.
 
-Proposed approach: Add a Next.js web app, Go API, Go CLI, shared config, local Postgres, migrations, tests, linting, and README setup instructions.
+Proposed approach: Add `apps/web`, package manager config, TypeScript, linting, tests, formatting, and README setup instructions.
 
 Acceptance criteria:
 
-- The repo has `apps/web`, `server`, and `cli` directories.
-- A local Postgres database can be started or connected.
+- The repo has an `apps/web` Next.js app.
 - The web app can run locally.
-- The API can run locally.
-- The CLI can build locally.
+- The web app has TypeScript configured.
+- The web app has lint and test commands.
 - README includes exact local setup commands.
 - CI or local quality commands are documented.
 
 Verify:
 
 - Run the documented install command.
-- Run the documented API command.
 - Run the documented web command.
-- Run the documented CLI build command.
+- Run the documented lint command.
 - Run the documented test command.
 
-Out of scope: Product UI, auth, billing, and deployed infrastructure.
+Out of scope: Product UI, auth, database, API, CLI, billing, and deployment.
 
-### 2. Implement the anonymous browser scratchpad
+### 2. Add baseline app shell and styling system
 
-Goal: Build the free transient writing surface.
+Goal: Establish the visual foundation for a calm writing surface.
 
-Context: Free users should be able to write immediately without an account.
+Context: The editor should be minimal and should not feel like an admin dashboard.
 
-Relevant docs: `docs/prd.md`.
+Relevant docs: `docs/prd.md`, `docs/architecture.md`, `AGENTS.md`.
 
-Proposed approach: Create the homepage/editor route with a local draft stored in browser storage.
+Proposed approach: Add the root route, app layout, global CSS, font choice, color tokens, and a simple responsive shell.
 
 Acceptance criteria:
 
-- Visiting the app opens a blank Markdown writing surface.
+- Visiting the app opens the editor route.
 - The homepage tag appears as `A Markdown notepad for agents and humans.`
-- Anonymous writing does not call document save APIs.
-- Draft text survives refresh in the same browser.
-- Export downloads a `.md` file.
-- The UI is minimal and writing-focused.
+- The layout has a thin top bar and restrained bottom bar.
+- The writing area is visually dominant.
+- The page works on desktop and mobile widths.
+- Styling avoids heavy cards, marketing layout, and decorative clutter.
 
 Verify:
 
-- Open the app in a browser.
+- Run the web app locally.
+- Inspect desktop and mobile browser layouts.
+- Run lint and tests.
+
+Out of scope: CodeMirror, Markdown preview, export, saved docs, and auth.
+
+## Phase 1 Issues
+
+### 3. Implement the anonymous Markdown editor
+
+Goal: Let users write Markdown immediately without an account.
+
+Context: Phase 1 is a local anonymous scratchpad.
+
+Relevant docs: `docs/prd.md`, `docs/architecture.md`.
+
+Proposed approach: Add CodeMirror 6 for Markdown editing and connect it to local React state.
+
+Acceptance criteria:
+
+- The default screen contains a blank Markdown editor.
+- Users can type and edit Markdown.
+- The editor has sensible keyboard behavior for plain Markdown writing.
+- The UI remains focused on writing.
+- No document save API exists or is called.
+
+Verify:
+
+- Run the app locally.
+- Type and edit a Markdown document.
+- Check browser network activity during editing.
+- Run frontend tests for editor rendering.
+
+Out of scope: Preview mode, local persistence, export, auth, and saved docs.
+
+### 4. Persist anonymous drafts locally
+
+Goal: Make transient drafts survive refresh in the same browser.
+
+Context: Anonymous drafts are local only and do not touch a server.
+
+Relevant docs: `docs/prd.md`, `docs/architecture.md`.
+
+Proposed approach: Store draft body and metadata in browser storage, then hydrate the editor on load.
+
+Acceptance criteria:
+
+- Draft text survives refresh in the same browser.
+- Draft metadata records the last edited timestamp.
+- Users can clear the local draft.
+- Clearing the local draft removes the stored body.
+- Local persistence does not run during server rendering.
+
+Verify:
+
 - Type Markdown.
 - Refresh and confirm the draft remains.
-- Export and inspect the `.md` file.
-- Check network requests do not include saved document writes.
+- Clear the draft and refresh.
+- Run tests for storage read, write, and clear behavior.
 
-Out of scope: Paid save, auth, CLI, and sharing.
+Out of scope: Cross-device sync, database persistence, auth, and autosave to an API.
 
-### 3. Add edit and view modes with Markdown preview
+### 5. Add edit and view modes with keyboard shortcuts
 
-Goal: Support the core writing/reading loop.
+Goal: Support the core writing and reading loop.
 
-Context: The editor should copy iA Writer minimalism and use mode switching instead of default split view.
+Context: The default early experience is edit or view, not split view.
 
 Relevant docs: `docs/prd.md`.
 
-Proposed approach: Use CodeMirror 6 for edit mode and sanitized Markdown rendering for view mode.
+Proposed approach: Add mode state, toolbar controls, bottom status, and `Ctrl+R` plus `Cmd+R` handling inside the app.
 
 Acceptance criteria:
 
 - Edit mode shows raw Markdown.
 - View mode shows rendered Markdown.
-- `Ctrl+R` toggles edit/view mode.
-- `Cmd+R` toggles edit/view mode on macOS.
-- The browser refresh shortcut is prevented only inside the app editor context.
-- Preview supports headings, paragraphs, lists, links, blockquotes, tables, code blocks, and inline code.
-- View mode has polished typography and generous spacing.
+- `Ctrl+R` toggles edit and view mode.
+- `Cmd+R` toggles edit and view mode on macOS.
+- Browser refresh is prevented only when the app handles the shortcut.
+- The current mode is visible in the UI.
+- Toggling modes does not lose editor content.
 
 Verify:
 
-- Toggle modes with keyboard shortcuts.
+- Toggle modes with the keyboard shortcuts.
+- Toggle modes with the visible control.
+- Run frontend tests for mode switching.
+- Confirm normal browser refresh still works outside the editor shortcut context.
+
+Out of scope: Split view and saved docs.
+
+### 6. Implement Markdown preview
+
+Goal: Render common Markdown as a polished document.
+
+Context: View mode should feel like a finished document.
+
+Relevant docs: `docs/prd.md`, `docs/architecture.md`.
+
+Proposed approach: Use remark, rehype, remark-gfm, and sanitized rendering for preview mode.
+
+Acceptance criteria:
+
+- Preview supports headings, paragraphs, lists, links, blockquotes, tables, code blocks, and inline code.
+- Links render safely.
+- Raw HTML is either sanitized or disabled.
+- Code blocks are readable.
+- Preview typography is calm and readable.
+- Preview works on desktop and mobile widths.
+
+Verify:
+
 - Render a fixture document covering supported Markdown.
-- Run frontend tests for mode switching and rendering.
 - Inspect desktop and mobile browser layouts.
+- Run frontend rendering tests.
 
-Out of scope: Mermaid, saved docs, and collaboration.
+Out of scope: Mermaid, public rendering, saved docs, and server-side rendering of shared docs.
 
-### 4. Add Mermaid diagram preview
+### 7. Add Mermaid diagram preview
 
-Goal: Make Markdown diagrams useful for scripts, specs, and agent context.
+Goal: Make Markdown diagrams useful in specs, scripts, and agent context.
 
-Context: Owain writes scripts and docs that need Markdown diagrams.
+Context: Mermaid fenced blocks are important for technical writing.
 
-Relevant docs: `docs/prd.md`.
+Relevant docs: `docs/prd.md`, `docs/architecture.md`.
 
-Proposed approach: Render fenced `mermaid` code blocks in preview mode with Mermaid.
+Proposed approach: Detect fenced `mermaid` blocks in preview mode and render them with Mermaid.
 
 Acceptance criteria:
 
 - Valid Mermaid blocks render as diagrams in preview mode.
 - Invalid Mermaid blocks show a readable inline error.
-- Invalid Mermaid does not block editing, saving, or previewing the rest of the doc.
+- Invalid Mermaid does not block editing or previewing the rest of the doc.
 - Raw Markdown export preserves the original Mermaid block.
+- Rendering does not flash broken layout during normal use.
 
 Verify:
 
 - Preview a valid flowchart.
 - Preview an invalid diagram.
-- Export and confirm source Markdown is unchanged.
-- Run frontend tests for Mermaid block handling where practical.
+- Confirm the rest of the document still renders.
+- Run frontend tests where practical.
 
 Out of scope: Visual Mermaid editing.
 
-### 5. Implement auth and paid entitlement checks
+### 8. Add Markdown export and document actions
 
-Goal: Add the account and paid-access foundation.
+Goal: Let anonymous users get their Markdown out of the app.
 
-Context: Saving docs is the paid boundary.
+Context: Phase 1 has no database save, so export matters.
 
-Relevant docs: `docs/prd.md`, `docs/architecture.md`.
+Relevant docs: `docs/prd.md`.
 
-Proposed approach: Add user auth, session handling, subscription state, and server-side entitlement checks.
+Proposed approach: Add export, copy, and clear actions with restrained UI.
 
 Acceptance criteria:
 
-- Users can sign up and sign in locally.
-- The API exposes the current user and entitlement state.
-- Paid-only operations are denied without an active entitlement.
-- Paid-only failures return a consistent 402 response.
-- Private API routes require auth.
-- Unauthorized access to another user's private doc returns 404.
+- Export downloads the current draft as a `.md` file.
+- The exported file contains the exact Markdown source.
+- Copy writes the current Markdown source to the clipboard.
+- Clear asks for confirmation before deleting the local draft.
+- Actions are available without creating dashboard clutter.
+
+Verify:
+
+- Export a draft and inspect the downloaded file.
+- Copy a draft and paste it into a text editor.
+- Clear a draft and confirm storage is removed.
+- Run tests for export filename and content behavior where practical.
+
+Out of scope: Import, saved docs, and sharing.
+
+### 9. Add Phase 1 acceptance tests and visual QA
+
+Goal: Make the local MVP coherent enough to deploy.
+
+Context: Phase 2 should start only after the local product feels right.
+
+Relevant docs: `docs/prd.md`, `docs/architecture.md`.
+
+Proposed approach: Add browser tests for the anonymous flow, fixture docs for preview, and manual QA notes in README.
+
+Acceptance criteria:
+
+- A new developer can run the local MVP from README instructions.
+- Anonymous scratchpad flow works.
+- Draft persistence works.
+- Edit and view toggling works.
+- Export works.
+- Mermaid preview works.
+- Visual QA confirms the editor is minimal and readable.
+
+Verify:
+
+- Run the full documented test command.
+- Run the browser acceptance tests.
+- Complete the anonymous scratchpad flow manually.
+- Inspect desktop and mobile screenshots.
+
+Out of scope: GCP deployment, auth, saved docs, and CLI.
+
+## Phase 2 Issues
+
+### 10. Prepare the GCP deployment plan
+
+Goal: Define the exact GCP deployment shape before provisioning.
+
+Context: Phase 2 deploys the anonymous editor only.
+
+Relevant docs: `docs/architecture.md`.
+
+Proposed approach: Document required services, IAM roles, secrets, domain setup, build path, and smoke tests.
+
+Acceptance criteria:
+
+- Required GCP APIs are listed.
+- Required project values are listed.
+- Cloud Run service names are defined.
+- Artifact Registry requirements are defined.
+- Domain and HTTPS plan is documented.
+- A checklist exists for values Owain must provide.
+- The plan explicitly excludes Postgres, auth, Stripe, and saved docs.
+
+Verify:
+
+- Review the deployment doc.
+- Confirm every environment value has an owner and source.
+
+Out of scope: Creating the GCP project.
+
+### 11. Containerize the anonymous web app
+
+Goal: Produce a deployable artifact for Cloud Run.
+
+Context: The local app needs a production runtime.
+
+Relevant docs: `docs/architecture.md`.
+
+Proposed approach: Add a production Dockerfile, health endpoint if needed, and documented local image commands.
+
+Acceptance criteria:
+
+- The web app can be built into a production container.
+- The container runs locally.
+- The container serves the editor.
+- The container has a health check or documented readiness path.
+- Build commands are documented.
+
+Verify:
+
+- Build the production image locally.
+- Run the image locally.
+- Open the app from the local container.
+- Run the health check or readiness check.
+
+Out of scope: API container, CLI artifacts, and database migrations.
+
+### 12. Deploy the anonymous MVP to Cloud Run
+
+Goal: Make the anonymous editor publicly available on GCP.
+
+Context: This validates the hosted product surface before persistence exists.
+
+Relevant docs: `docs/architecture.md`.
+
+Proposed approach: Deploy the container, configure the domain, and validate browser behavior in production.
+
+Acceptance criteria:
+
+- The app is reachable over HTTPS.
+- The custom domain is configured.
+- Anonymous editor flow works in production.
+- Local browser drafts stay local in production.
+- Export works in production.
+- No auth, database, Stripe, or saved-doc feature is exposed.
+
+Verify:
+
+- Run production smoke tests.
+- Complete anonymous scratchpad flow.
+- Refresh and confirm local draft persistence.
+- Export a `.md` file.
+
+Out of scope: Auth, saved docs, public sharing, CLI, and payments.
+
+### 13. Add deployment CI/CD and release checklist
+
+Goal: Make production updates repeatable.
+
+Context: Manual deploys are acceptable early, but releases need a clear path.
+
+Relevant docs: `docs/architecture.md`.
+
+Proposed approach: Add GitHub Actions or Cloud Build for tests, image build, and deploy.
+
+Acceptance criteria:
+
+- Main branch runs tests.
+- Deploy workflow builds the production image.
+- Deploy workflow publishes the image.
+- Deploy workflow updates Cloud Run.
+- Required secrets are documented.
+- Release checklist covers build, deploy, smoke test, and rollback.
+
+Verify:
+
+- Run CI on a pull request.
+- Run deploy workflow in a controlled environment.
+- Confirm release checklist is accurate.
+
+Out of scope: Database migrations and CLI releases.
+
+## Phase 3 Issues
+
+### 14. Add personal auth foundation
+
+Goal: Add authentication for Owain-only saved docs.
+
+Context: Phase 3 is for Owain's own use cases before a public paid tier exists.
+
+Relevant docs: `docs/prd.md`, `docs/architecture.md`.
+
+Proposed approach: Add auth, session handling, current-user API, and an allowlist for the personal saved-doc feature.
+
+Acceptance criteria:
+
+- Owain can sign in locally.
+- The app can identify the current user.
+- Saved-doc routes require auth.
+- Non-allowed users cannot use saved-doc features.
+- Unauthorized private API requests return 401.
+- Authenticated users without access receive 403.
 
 Verify:
 
 - Run API auth tests.
 - Run web auth flow locally.
-- Attempt paid-only operations as anonymous, unpaid, and paid test users.
+- Attempt saved-doc operations as anonymous, allowed, and not allowed users.
 
-Out of scope: Stripe production setup and deployment.
+Out of scope: Stripe, public paid signups, and team accounts.
 
-### 6. Implement saved documents
+### 15. Add Postgres and document migrations
 
-Goal: Let paid users create, edit, autosave, list, search, and archive docs.
+Goal: Create the persistence foundation for saved docs.
 
-Context: Saved docs are the first paid feature.
+Context: Anonymous drafts remain browser-local, but saved docs need durable storage.
 
-Relevant docs: `docs/prd.md`, `docs/architecture.md`.
+Relevant docs: `docs/architecture.md`.
 
-Proposed approach: Add document database tables, document API routes, autosave in the editor, and a minimal saved-doc list.
+Proposed approach: Add local Postgres, migrations, document tables, and test database setup.
 
 Acceptance criteria:
 
-- Paid users can create saved docs.
-- Paid users can autosave document content.
-- Paid users can rename docs through first heading or title metadata.
-- Paid users can list saved docs.
-- Paid users can search saved docs.
-- Paid users can archive docs.
-- Unpaid users cannot create or save docs.
-- Docs are scoped to their owner.
+- Local Postgres can be started or connected.
+- Migrations create users, documents, document versions, and API token tables as needed.
+- Migration commands are documented.
+- Tests can run against a local or test database.
 
 Verify:
 
-- Run migration tests.
-- Run API document tests.
-- Run web tests for autosave and list behavior.
-- Confirm unpaid save attempts fail with 402.
+- Start local Postgres.
+- Run migrations.
+- Run database tests.
+- Inspect the created schema.
 
-Out of scope: Sharing, CLI, document history, and teams.
+Out of scope: Stripe subscription tables unless needed later.
 
-### 7. Implement public sharing and raw Markdown URLs
+### 16. Implement saved document API
 
-Goal: Allow paid users to share read-only docs by URL.
+Goal: Let the app create, read, update, search, and archive saved docs.
 
-Context: Docs are private unless explicitly shared.
+Context: The API becomes server-side truth for personal saved docs.
 
 Relevant docs: `docs/prd.md`, `docs/architecture.md`.
 
-Proposed approach: Add share/unshare API routes, public HTML rendering, and public raw Markdown routes.
+Proposed approach: Add Go HTTP routes for document CRUD, content replace, search, archive, ownership checks, and error behavior.
+
+Acceptance criteria:
+
+- Allowed users can create saved docs.
+- Allowed users can read their own docs.
+- Allowed users can update document title and body.
+- Allowed users can list saved docs.
+- Allowed users can search saved docs.
+- Allowed users can archive docs.
+- Unauthorized access to another user's doc returns 404.
+- Anonymous private API requests return 401.
+
+Verify:
+
+- Run API document tests.
+- Exercise routes against the local API.
+- Confirm ownership and access checks.
+
+Out of scope: Sharing, CLI, document history UI, and payments.
+
+### 17. Connect the web editor to saved docs
+
+Goal: Let Owain save and reopen documents from the browser app.
+
+Context: The editor should support local anonymous drafts and saved docs without becoming a dashboard.
+
+Relevant docs: `docs/prd.md`, `docs/architecture.md`.
+
+Proposed approach: Add saved-doc mode, autosave, document list, search, open, archive, and clear separation from anonymous drafts.
+
+Acceptance criteria:
+
+- Owain can create a saved doc from the editor.
+- Saved docs autosave.
+- Autosave state is visible but quiet.
+- Owain can list saved docs.
+- Owain can search saved docs.
+- Owain can open a saved doc.
+- Owain can archive a saved doc.
+- Anonymous users still get the local scratchpad flow.
+
+Verify:
+
+- Run web tests for saved-doc flows.
+- Complete create, autosave, list, search, open, and archive manually.
+- Confirm anonymous flow still works.
+
+Out of scope: Public paid accounts, sharing, CLI, and document history UI.
+
+### 18. Implement public sharing and raw Markdown URLs
+
+Goal: Allow saved docs to be shared read-only by URL.
+
+Context: Raw `.md` URLs are a core agent workflow.
+
+Relevant docs: `docs/prd.md`, `docs/architecture.md`.
+
+Proposed approach: Add share and unshare API routes, public HTML rendering, public raw Markdown routes, and UI controls.
 
 Acceptance criteria:
 
 - Saved docs are private by default.
-- Paid users can share a doc.
+- Owain can share a doc.
 - Sharing creates or enables an unguessable public token.
 - Anyone with the public URL can read the HTML view.
 - Anyone with the `.md` URL can read raw Markdown.
@@ -223,13 +538,13 @@ Verify:
 - Open the public `.md` URL.
 - Unshare the doc and confirm both URLs return 404.
 
-Out of scope: Private invites, comments, and collaboration.
+Out of scope: Private invites, comments, collaboration, and paid entitlements.
 
-### 8. Implement the CLI MVP
+### 19. Implement the CLI MVP
 
-Goal: Make `jotter.md` useful from terminals and coding agents.
+Goal: Make saved docs useful from terminals and coding agents.
 
-Context: The CLI is a V1 product surface, not a later add-on.
+Context: The CLI is a first-class product surface once the document API exists.
 
 Relevant docs: `docs/prd.md`, `docs/architecture.md`.
 
@@ -238,7 +553,7 @@ Proposed approach: Build a Go CLI that authenticates, stores tokens locally, and
 Acceptance criteria:
 
 - `jotter auth login` stores a usable local token.
-- `jotter new` creates a saved doc for paid users.
+- `jotter new` creates a saved doc.
 - `jotter list` lists saved docs.
 - `jotter push` creates or updates a doc from a file.
 - `jotter pull` writes a doc to a file.
@@ -253,17 +568,17 @@ Acceptance criteria:
 Verify:
 
 - Run CLI unit tests.
-- Run CLI against local API.
-- Exercise the command list against a paid test user.
-- Confirm unpaid users cannot use paid document commands.
+- Run CLI against the local API.
+- Exercise the command list against an allowed local user.
+- Confirm anonymous users cannot use saved document commands.
 
 Out of scope: Homebrew distribution and shell completions.
 
-### 9. Add document history
+### 20. Add document history
 
 Goal: Provide a safety net for saved docs.
 
-Context: Paid users should be able to recover earlier content.
+Context: Saved Markdown should be recoverable after meaningful edits.
 
 Relevant docs: `docs/prd.md`, `docs/architecture.md`.
 
@@ -272,8 +587,8 @@ Proposed approach: Store document versions on meaningful saves and expose a mini
 Acceptance criteria:
 
 - Saved docs record versions at safe intervals or explicit saves.
-- Users can list versions for their own docs.
-- Users can restore a previous version.
+- Owain can list versions for a doc.
+- Owain can restore a previous version.
 - Version restore creates a new latest version.
 - Version access is owner-scoped.
 
@@ -285,125 +600,42 @@ Verify:
 
 Out of scope: Visual diffs.
 
-### 10. Add Phase 1 quality pass and local MVP acceptance
+## Phase 4 Issues
 
-Goal: Make the local MVP coherent enough to deploy.
+### 21. Add subscription data model and entitlement checks
 
-Context: Phase 2 should start only after the local product is usable.
+Goal: Turn saved docs into a paid product boundary.
 
-Relevant docs: `docs/prd.md`, `docs/architecture.md`.
-
-Proposed approach: Add end-to-end tests, visual QA, docs cleanup, and local smoke scripts.
-
-Acceptance criteria:
-
-- A new developer can run the local MVP from README instructions.
-- Anonymous scratchpad flow works.
-- Paid saved-doc flow works with seeded local entitlement.
-- Public sharing flow works.
-- CLI flow works against local API.
-- Tests cover critical auth, document, sharing, and CLI behavior.
-- Visual QA confirms the editor is minimal and readable.
-
-Verify:
-
-- Run the full documented test command.
-- Run local smoke script.
-- Complete anonymous, paid, share, and CLI flows manually.
-
-Out of scope: GCP deployment.
-
-## Phase 2 Issues
-
-### 11. Prepare GCP infrastructure plan
-
-Goal: Define the exact GCP deployment shape before provisioning.
-
-Context: Owain will create the GCP project and provide project details.
-
-Relevant docs: `docs/architecture.md`.
-
-Proposed approach: Document required services, IAM roles, secrets, domains, environments, and deployment commands.
-
-Acceptance criteria:
-
-- Required GCP APIs are listed.
-- Required secrets are listed.
-- Cloud Run services are named.
-- Cloud SQL instance requirements are defined.
-- Artifact Registry requirements are defined.
-- Domain and HTTPS plan is documented.
-- A checklist exists for values Owain must provide.
-
-Verify:
-
-- Review the deployment doc.
-- Confirm every environment variable has an owner and source.
-
-Out of scope: Creating the GCP project.
-
-### 12. Containerize web, API, and CLI build artifacts
-
-Goal: Produce deployable artifacts for GCP.
-
-Context: Phase 2 uses Cloud Run and Artifact Registry.
-
-Relevant docs: `docs/architecture.md`.
-
-Proposed approach: Add Dockerfiles, production build commands, and image publishing scripts or CI jobs.
-
-Acceptance criteria:
-
-- The API/web runtime can be built into a production container.
-- The container runs locally.
-- The container exposes health checks.
-- The CLI can be built as release artifacts.
-- Build commands are documented.
-
-Verify:
-
-- Build the production image locally.
-- Run the image locally.
-- Hit the health endpoint.
-- Build CLI binaries locally.
-
-Out of scope: GCP service creation.
-
-### 13. Provision Cloud SQL and run migrations
-
-Goal: Set up production Postgres and migration flow.
-
-Context: Saved docs and billing state need durable storage.
-
-Relevant docs: `docs/architecture.md`.
-
-Proposed approach: Configure Cloud SQL, database users, connection secrets, and migration execution.
-
-Acceptance criteria:
-
-- Cloud SQL Postgres is provisioned.
-- Database credentials are stored in Secret Manager.
-- Migrations can run against the deployed database.
-- Rollback guidance is documented.
-- The API can connect to Cloud SQL from Cloud Run.
-
-Verify:
-
-- Run migrations against the target database.
-- Deploy API with DB connection.
-- Confirm readiness endpoint reports database connectivity.
-
-Out of scope: App domain routing.
-
-### 14. Configure Stripe for production entitlements
-
-Goal: Enable the paid save/sync boundary in production.
-
-Context: Paid status must be driven by Stripe webhooks.
+Context: Phase 4 opens saved docs beyond Owain.
 
 Relevant docs: `docs/prd.md`, `docs/architecture.md`.
 
-Proposed approach: Add production Stripe products, checkout flow, customer portal, webhook handling, and entitlement sync.
+Proposed approach: Add subscription tables, entitlement service, paid-only checks, and consistent 402 errors.
+
+Acceptance criteria:
+
+- Users have subscription state.
+- Paid-only operations require active entitlement.
+- Unpaid users receive consistent 402 responses.
+- Existing personal allowlist behavior can be removed or narrowed.
+- Tests cover anonymous, unpaid, paid, and unauthorized cases.
+
+Verify:
+
+- Run entitlement tests.
+- Attempt paid-only operations as anonymous, unpaid, paid, and unauthorized users.
+
+Out of scope: Stripe checkout and webhooks.
+
+### 22. Add Stripe checkout, portal, and webhooks
+
+Goal: Connect production billing to paid entitlements.
+
+Context: Paid status must be driven by Stripe events.
+
+Relevant docs: `docs/prd.md`, `docs/architecture.md`.
+
+Proposed approach: Add checkout flow, customer portal, verified webhooks, and subscription sync.
 
 Acceptance criteria:
 
@@ -412,71 +644,41 @@ Acceptance criteria:
 - Canceled or failed subscriptions remove paid entitlement according to policy.
 - Stripe webhooks are verified.
 - Users can open the billing portal.
-- Stripe secrets are stored in Secret Manager.
+- Stripe secrets are documented.
 
 Verify:
 
-- Complete Stripe test-mode checkout in deployed environment.
+- Complete Stripe test-mode checkout.
 - Receive and process webhook events.
 - Confirm entitlement changes in the app and API.
 
-Out of scope: Multiple plans and coupons.
+Out of scope: Multiple plans, coupons, taxes, and enterprise billing.
 
-### 15. Deploy the MVP to Cloud Run
+### 23. Harden the public paid product
 
-Goal: Make the MVP publicly available on GCP.
+Goal: Prepare the app for users beyond Owain.
 
-Context: This completes the deployed MVP.
+Context: Payments make the product externally usable.
 
-Relevant docs: `docs/architecture.md`.
+Relevant docs: `docs/prd.md`, `docs/architecture.md`.
 
-Proposed approach: Deploy the app/API container, configure environment variables, connect Cloud SQL, configure domain, and validate public routes.
+Proposed approach: Add account polish, empty states, billing states, support paths, production monitoring, rate limits, and abuse checks.
 
 Acceptance criteria:
 
-- The app is reachable over HTTPS.
-- The custom domain is configured.
-- Auth works in production.
-- Paid entitlement works in production.
-- Saved docs persist.
-- Public share URLs work.
-- Raw `.md` share URLs work.
-- Private docs are not publicly accessible.
-- The CLI can target the production API.
+- New users understand what is free and what is paid.
+- Unpaid users keep the anonymous scratchpad flow.
+- Paid users can save, sync, share, and use the CLI/API.
+- Billing failure states are clear.
+- Basic rate limits protect public routes and API routes.
+- Error monitoring is configured.
+- Production smoke tests cover anonymous, paid, sharing, and CLI flows.
 
 Verify:
 
+- Run full automated tests.
 - Run production smoke tests.
-- Complete anonymous scratchpad flow.
-- Complete paid save flow.
-- Complete share and unshare flow.
-- Fetch a shared `.md` URL from the CLI or curl.
+- Complete anonymous, unpaid, paid, sharing, and CLI flows.
+- Review monitoring and error logs after smoke tests.
 
-Out of scope: Team collaboration and realtime editing.
-
-### 16. Add deployment CI/CD and release checklist
-
-Goal: Make production updates repeatable.
-
-Context: Manual deploys are acceptable early, but the MVP needs a documented release path.
-
-Relevant docs: `docs/architecture.md`.
-
-Proposed approach: Add GitHub Actions or Cloud Build for tests, image build, deploy, and CLI artifact release.
-
-Acceptance criteria:
-
-- Main branch runs tests.
-- Deploy workflow builds and publishes the container.
-- Deploy workflow updates Cloud Run.
-- CLI release artifacts are produced.
-- Required secrets are documented.
-- Release checklist covers migration, deploy, smoke test, and rollback.
-
-Verify:
-
-- Run CI on a pull request.
-- Run deploy workflow in a controlled environment.
-- Confirm release checklist is accurate.
-
-Out of scope: Multi-region deployment and enterprise release process.
+Out of scope: Team workspaces, collaboration, comments, and enterprise features.

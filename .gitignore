@@ -4,6 +4,8 @@ dist/
 build/
 coverage/
 .next/
+test-results/
+playwright-report/
 .env
 .env.*
 !.env.example
