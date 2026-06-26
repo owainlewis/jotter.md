@@ -39,8 +39,8 @@ export default function Landing() {
         <section className="hero">
           <h1 className="heroTitle">Minimalist writing for agents and humans</h1>
           <p className="heroSub">
-            A calm browser notepad for Markdown. Write it, share it by link, and let your agents read and edit it too.
-            No account needed to start.
+            A calm, minimalist writing app where you and your agents work on the same Markdown documents, right in your
+            browser. Share any doc with a link. No account needed to start.
           </p>
           <div className="heroActions">
             <Link className="btnPrimary" href="/write">
