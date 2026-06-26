@@ -252,6 +252,8 @@ export default function Editor() {
   }
 
   function deleteDoc(id: string) {
+    // Pinned documents are protected from deletion; unpin first to remove one.
+    if (docs.find((d) => d.id === id)?.pinned) return;
     setDocs((prev) => {
       const next = prev.filter((d) => d.id !== id);
       const remaining = next.length > 0 ? next : seedDocs();
@@ -366,7 +368,7 @@ export default function Editor() {
                   >
                     <PinIcon filled={Boolean(doc.pinned)} />
                   </span>
-                  {docs.length > 1 && (
+                  {docs.length > 1 && !doc.pinned && (
                     <span
                       className="docRowDelete"
                       role="button"
