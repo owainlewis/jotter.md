@@ -23,20 +23,30 @@ const ACTIVE_KEY = "jotter.active.v2";
 
 const welcomeBody = `# Markdown for agents and humans
 
-Write here. Everything stays in this browser until you choose to save it.
-Press **Cmd + R** (or **Ctrl + R**) to switch between editing and the rendered
-document.
+Welcome to jotter. This is your sample document and quick guide.
+It is pinned, so it stays at the top, and pinned documents cannot be deleted until you unpin them.
 
-## Why jotter
+## Writing
 
-- A calm, almost empty writing surface.
-- A preview that reads like a finished document.
-- Plain Markdown in, plain Markdown out, so agents can read and write it too.
+Just start typing. Everything is saved locally in this browser until you choose to share or export it.
 
-## Markdown that looks the part
+Press **Cmd + R** (or **Ctrl + R**) to switch between **Edit** and **Preview**.
+Edit shows raw Markdown. Preview reads like a finished document.
 
-Inline \`code\`, **bold**, and *italic* all render cleanly. Links like
-[jotter.md](https://jotter.md) pick up the accent color.
+## Your documents
+
+- The sidebar lists every document. Create a new one with the **+** button.
+- Use the **Filter** box to find a document by its title or text.
+- **Pin** a document to float it to the top. Pinned documents are protected, so to delete one you unpin it first. Try unpinning this guide to reveal its delete button.
+
+## Sharing and export
+
+- **Share** copies a private link. The document travels inside the link, so only people you send it to can read it.
+- **Export** downloads the raw \`.md\` file.
+
+## A finished document
+
+Inline \`code\`, **bold**, and *italic* all render cleanly. Links like [jotter.md](https://jotter.md) pick up the accent color.
 
 > The best tool for thinking in Markdown should disappear while you write.
 
@@ -46,9 +56,7 @@ export function greet(name: string) {
 }
 \`\`\`
 
-## Diagrams
-
-Fenced \`mermaid\` blocks render as diagrams.
+Diagrams render from fenced \`mermaid\` blocks:
 
 \`\`\`mermaid
 flowchart LR
@@ -62,7 +70,7 @@ flowchart LR
 | Browser | Humans   |
 | CLI     | Agents   |
 
-Start a new document any time with the **+** button in the sidebar.
+Dark mode lives in the account menu and is part of jotter Pro.
 `;
 
 function newId() {
@@ -73,7 +81,7 @@ function newId() {
 }
 
 function seedDocs(): Doc[] {
-  return [{ id: "welcome", body: welcomeBody }];
+  return [{ id: "welcome", body: welcomeBody, pinned: true }];
 }
 
 function SidebarIcon() {
