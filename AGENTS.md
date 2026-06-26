@@ -80,7 +80,9 @@ gh project field-list 14 --owner owainlewis
 
 Treat GitHub Issues and the project board as the live execution tracker.
 
-Check `docs/issues.md` before creating or changing issues because the local plan may be newer than the live board.
+The project board is the single source of truth for issues.
+
+There is no local issue plan file.
 
 ## Writing Style
 

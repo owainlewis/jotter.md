@@ -22,7 +22,7 @@ Every saved doc is plain Markdown, private by default, and addressable through w
 
 - [PRD](docs/prd.md)
 - [Architecture](docs/architecture.md)
-- [Issue plan](docs/issues.md)
+- [Project board](https://github.com/users/owainlewis/projects/14)
 - [Goal prompts](docs/goal-prompts.md)
 - [Local MVP demo goal](docs/local-mvp-demo-goal.md)
 
@@ -79,6 +79,6 @@ Phase 4 adds payments and the public paid tier.
 
 ## Repository Status
 
-This repository currently contains the product and implementation plan.
+The anonymous browser editor foundation is built.
 
-The implementation plan is in [docs/issues.md](docs/issues.md).
+The implementation plan lives on the [GitHub project board](https://github.com/users/owainlewis/projects/14), which is the source of truth for issues.
