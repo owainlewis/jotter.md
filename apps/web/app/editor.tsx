@@ -153,7 +153,7 @@ function UserIcon() {
 export default function Editor() {
   const [docs, setDocs] = useState<Doc[]>(seedDocs);
   const [activeId, setActiveId] = useState<string>("welcome");
-  const [mode, setMode] = useState<Mode>("edit");
+  const [mode, setMode] = useState<Mode>("preview");
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [copied, setCopied] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
