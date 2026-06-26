@@ -11,7 +11,7 @@
   --accent: #2c6b60;
   --accent-tint: #e7efec;
   --code-bg: #f0efe8;
-  --selection: #d8e6e1;
+  --selection: rgba(44, 107, 96, 0.13);
   --elevated: var(--surface);
   --hover: rgba(0, 0, 0, 0.05);
   --hover-soft: rgba(0, 0, 0, 0.035);
@@ -44,7 +44,7 @@
   --accent: #6fbcad;
   --accent-tint: #21342f;
   --code-bg: #232320;
-  --selection: #2e4843;
+  --selection: rgba(111, 188, 173, 0.22);
   --elevated: #26261f;
   --hover: rgba(255, 255, 255, 0.07);
   --hover-soft: rgba(255, 255, 255, 0.05);
@@ -127,6 +127,7 @@ button {
   display: inline-flex;
   align-items: center;
   gap: 9px;
+  user-select: none;
 }
 
 .brandMark {

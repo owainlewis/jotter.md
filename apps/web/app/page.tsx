@@ -33,7 +33,7 @@ export default function Landing() {
             </span>
           </span>
           <nav className="landingNavLinks">
-            <a href="#pricing">Pricing</a>
+            <a href="#pricing">Go Pro</a>
             <Link className="landingNavCta" href="/write">
               Start writing
             </Link>
@@ -42,8 +42,8 @@ export default function Landing() {
         <div className="heroInner">
           <h1 className="heroTitle">Minimalist writing for agents and humans</h1>
           <p className="heroSub">
-            A calm, minimalist writing app where you and your agents work on the same Markdown documents, right in your
-            browser. Share any doc with a link. No account needed to start.
+            A calm, minimalist Markdown app. Think, write, and collaborate with your agents, all in your browser. Free to
+            start.
           </p>
           <div className="heroActions">
             <Link className="btnPrimary" href="/write">
