@@ -127,7 +127,7 @@ The API owns server-side truth once saved docs exist.
 
 It exposes document CRUD, content replace, public share, raw Markdown, auth, and API token management.
 
-It must enforce private docs and later paid-only save/share/API access.
+It must enforce private docs and later paid-only save/export/share/API access.
 
 Browser and CLI should use the same document API.
 
@@ -233,9 +233,19 @@ Replacing saved doc content requires the same entitlement check.
 
 Sharing docs requires the same entitlement check.
 
+Exporting saved docs requires the same entitlement check once payments exist.
+
+Durable server share links require the same entitlement check once payments exist.
+
+Anonymous fragment share links can remain free because they do not create server state.
+
 Public shared docs do not require auth.
 
+Paid public share pages should render without visible Jotter branding, navigation, upgrade prompts, or product marketing.
+
 CLI/API token access requires the same entitlement check.
+
+Dark mode and additional writing themes require an active paid entitlement once payments exist.
 
 ## Error Behavior
 

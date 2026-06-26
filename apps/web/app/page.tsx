@@ -1,5 +1,10 @@
 import Editor from "./editor";
+import { EntitlementsProvider } from "./entitlements";
 
 export default function Home() {
-  return <Editor />;
+  return (
+    <EntitlementsProvider>
+      <Editor />
+    </EntitlementsProvider>
+  );
 }

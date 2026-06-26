@@ -5,23 +5,24 @@ import { useEffect, useMemo, useRef } from "react";
 
 marked.setOptions({ gfm: true, breaks: false });
 
-let mermaidReady = false;
+let mermaidTheme: string | null = null;
 
-async function loadMermaid() {
+async function loadMermaid(dark: boolean) {
   const mermaid = (await import("mermaid")).default;
-  if (!mermaidReady) {
+  const theme = dark ? "dark" : "neutral";
+  if (mermaidTheme !== theme) {
     mermaid.initialize({
       startOnLoad: false,
       securityLevel: "strict",
-      theme: "neutral",
+      theme,
       fontFamily: "var(--font-sans), system-ui, sans-serif"
     });
-    mermaidReady = true;
+    mermaidTheme = theme;
   }
   return mermaid;
 }
 
-export function MarkdownView({ source }: { source: string }) {
+export function MarkdownView({ source, theme = "light" }: { source: string; theme?: "light" | "dark" }) {
   const ref = useRef<HTMLElement>(null);
   const html = useMemo(() => marked.parse(source) as string, [source]);
 
@@ -36,7 +37,7 @@ export function MarkdownView({ source }: { source: string }) {
     (async () => {
       let mermaid: Awaited<ReturnType<typeof loadMermaid>>;
       try {
-        mermaid = await loadMermaid();
+        mermaid = await loadMermaid(theme === "dark");
       } catch (err) {
         const message = err instanceof Error ? err.message : String(err);
         root.querySelectorAll("code.language-mermaid").forEach((block) => {
@@ -77,7 +78,7 @@ export function MarkdownView({ source }: { source: string }) {
     return () => {
       cancelled = true;
     };
-  }, [html]);
+  }, [html, theme]);
 
   return <article ref={ref} className="markdown" dangerouslySetInnerHTML={{ __html: html }} />;
 }

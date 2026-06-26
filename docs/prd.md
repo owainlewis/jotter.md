@@ -77,7 +77,7 @@ It is not a docs platform with heavy permissions in V1.
 - Preview Markdown.
 - Preview Mermaid diagrams.
 - Keep a transient local draft.
-- Export Markdown.
+- Copy Markdown from the editor.
 - No account required.
 - No database save.
 - No CLI.
@@ -106,7 +106,8 @@ It is not a docs platform with heavy permissions in V1.
 
 - Add Stripe Checkout and Billing.
 - Add paid entitlements.
-- Let paid users save, sync, share, and use the CLI/API.
+- Let paid users save, sync, export, share, and use the CLI/API.
+- Add paid appearance features such as dark mode and themes.
 - Keep anonymous users limited to transient browser drafts.
 
 ## Core UX
@@ -141,7 +142,9 @@ Anonymous drafts should survive refresh in the same browser.
 
 Anonymous drafts can be cleared by the user.
 
-Anonymous users can export Markdown as a `.md` file.
+Anonymous users can copy Markdown from the editor.
+
+File export is part of the paid tier once payments exist.
 
 ## Saved Documents
 
@@ -179,6 +182,16 @@ https://jotter.md/d/share_abc123.md
 
 The raw `.md` route is required once sharing exists because agents need stable Markdown context URLs.
 
+Durable server share links are a paid feature.
+
+Paid share pages should be unbranded.
+
+They should not show Jotter navigation, upgrade prompts, product marketing, or visible app branding.
+
+The page should feel like the user's document.
+
+Anonymous fragment share links can stay free because they do not touch the backend and help people understand the product.
+
 ## Anonymous Sharing
 
 Anonymous users can share a document before any account or server exists.
@@ -209,9 +222,32 @@ Shared HTML must be sanitized before this ships publicly because a crafted link 
 
 ## Pricing And Storage
 
-The free tier writes, previews, exports, and shares by link, all in the browser, with no account.
+The free tier writes, previews, copies Markdown, and can use anonymous fragment share links in the browser with no account.
 
-The paid tier saves documents on the server, syncs them, manages shares, and unlocks the CLI and API.
+The paid tier saves documents on the server, syncs them, exports files, manages durable share links, and unlocks the CLI and API.
+
+Paid users also get minor product comforts:
+
+- Dark mode.
+- Additional writing themes.
+- File export.
+- Durable public share links.
+- Raw `.md` share URLs for agents.
+- Unbranded public share pages.
+
+Do not make free mode feel broken.
+
+Free mode should be useful as a transient browser notepad.
+
+Paid mode starts when users want persistence, portability, agent access, or customization.
+
+The pricing posture should be cheap enough that upgrading feels obvious once someone likes the app.
+
+The model is a small useful product with a low monthly price, high daily utility, and quiet stickiness from saved docs and agent workflows.
+
+Do not add heavy enterprise packaging for V1.
+
+Do not make the paid tier feel expensive for an individual user.
 
 Billing uses Stripe Checkout and Stripe Billing.
 

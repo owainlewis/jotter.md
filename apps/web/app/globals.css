@@ -12,6 +12,10 @@
   --accent-tint: #e7efec;
   --code-bg: #f0efe8;
   --selection: #d8e6e1;
+  --elevated: var(--surface);
+  --hover: rgba(0, 0, 0, 0.05);
+  --hover-soft: rgba(0, 0, 0, 0.035);
+  --hover-strong: rgba(0, 0, 0, 0.07);
   --sans: var(--font-sans), ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
   --mono: var(--font-mono), ui-monospace, "SF Mono", "JetBrains Mono", Menlo, monospace;
 
@@ -27,8 +31,32 @@
   --lh-body: 1.7; /* close to the golden ratio, opened slightly for screens */
 }
 
+:root[data-theme="dark"] {
+  --bg: #1a1a17;
+  --sidebar-bg: #161613;
+  --surface: #1a1a17;
+  --ink: #ecebe4;
+  --ink-soft: #d2d0c8;
+  --muted: #908d83;
+  --faint: #66645c;
+  --hairline: #2c2b26;
+  --hairline-strong: #3a382f;
+  --accent: #6fbcad;
+  --accent-tint: #21342f;
+  --code-bg: #232320;
+  --selection: #2e4843;
+  --elevated: #26261f;
+  --hover: rgba(255, 255, 255, 0.07);
+  --hover-soft: rgba(255, 255, 255, 0.05);
+  --hover-strong: rgba(255, 255, 255, 0.1);
+}
+
 * {
   box-sizing: border-box;
+}
+
+html {
+  background: var(--bg);
 }
 
 html,
@@ -189,7 +217,7 @@ button {
 }
 
 .docRow:hover {
-  background: rgba(0, 0, 0, 0.035);
+  background: var(--hover-soft);
 }
 
 .docRow.active {
@@ -258,7 +286,7 @@ button {
 
 .docRowDelete:hover {
   color: var(--ink);
-  background: rgba(0, 0, 0, 0.06);
+  background: var(--hover-strong);
 }
 
 /* -------------------------------------------------------------------- main */
@@ -311,7 +339,7 @@ button {
 }
 
 .iconButton:hover {
-  background: rgba(0, 0, 0, 0.05);
+  background: var(--hover);
   color: var(--ink);
 }
 
@@ -334,7 +362,7 @@ button {
 
 .modeToggle {
   display: inline-flex;
-  background: rgba(0, 0, 0, 0.045);
+  background: var(--hover-soft);
   border-radius: 9px;
   padding: 2px;
 }
@@ -351,7 +379,7 @@ button {
 }
 
 .modeToggle button.on {
-  background: var(--surface);
+  background: var(--elevated);
   color: var(--ink);
   box-shadow: 0 1px 2px rgba(27, 26, 23, 0.12), 0 0 0 0.5px rgba(27, 26, 23, 0.04);
 }
@@ -369,7 +397,7 @@ button {
 
 .textButton:hover {
   color: var(--ink);
-  background: rgba(0, 0, 0, 0.05);
+  background: var(--hover);
 }
 
 /* Account menu */
@@ -379,7 +407,7 @@ button {
 }
 
 .iconButton[aria-expanded="true"] {
-  background: rgba(0, 0, 0, 0.06);
+  background: var(--hover-strong);
   color: var(--ink);
 }
 
@@ -395,7 +423,7 @@ button {
   right: 0;
   z-index: 31;
   min-width: 186px;
-  background: var(--surface);
+  background: var(--elevated);
   border: 1px solid var(--hairline-strong);
   border-radius: 12px;
   box-shadow: 0 12px 32px rgba(27, 26, 23, 0.14), 0 2px 6px rgba(27, 26, 23, 0.08);
@@ -417,7 +445,84 @@ button {
 }
 
 .menuItem:hover {
-  background: rgba(0, 0, 0, 0.05);
+  background: var(--hover);
+}
+
+.menuItem.accent {
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.menuRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 8px 12px;
+}
+
+.menuRowLabel {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--ink);
+}
+
+.proPill {
+  font-size: 0.625rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--accent);
+  background: var(--accent-tint);
+  padding: 2px 6px;
+  border-radius: 999px;
+}
+
+.menuDivider {
+  height: 1px;
+  background: var(--hairline);
+  margin: 4px 6px;
+}
+
+.switch {
+  position: relative;
+  flex: 0 0 auto;
+  width: 38px;
+  height: 22px;
+  padding: 0;
+  border: 0;
+  border-radius: 999px;
+  background: var(--hover-strong);
+  cursor: pointer;
+  transition: background 0.16s ease;
+}
+
+.switch:disabled {
+  cursor: default;
+  opacity: 0.5;
+}
+
+.switch.on {
+  background: var(--accent);
+}
+
+.switchKnob {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 16px;
+  height: 16px;
+  background: #fff;
+  border-radius: 50%;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
+  transition: transform 0.16s ease;
+}
+
+.switch.on .switchKnob {
+  transform: translateX(16px);
 }
 
 .menuHint {

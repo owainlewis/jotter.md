@@ -3,8 +3,12 @@
 import Link from "next/link";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { snippetOf, titleOf, wordCount } from "./doc-utils";
+import { useEntitlements } from "./entitlements";
 import { MarkdownView } from "./markdown-view";
 import { encodeDoc } from "./share";
+
+type Theme = "light" | "dark";
+const THEME_KEY = "jotter.theme.v1";
 
 type Doc = {
   id: string;
@@ -118,9 +122,14 @@ export default function Editor() {
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [copied, setCopied] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [theme, setTheme] = useState<Theme>("light");
   const [hydrated, setHydrated] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const copyTimer = useRef<number | undefined>(undefined);
+
+  const { plan, setPlan, can } = useEntitlements();
+  const canDark = can("darkMode");
+  const darkActive = canDark && theme === "dark";
 
   // Load persisted state after mount so SSR and the first client render match.
   useEffect(() => {
@@ -152,6 +161,25 @@ export default function Editor() {
       // Storage may be unavailable (private mode); drafts stay in memory.
     }
   }, [docs, activeId, hydrated]);
+
+  // Hydrate the saved theme preference after mount.
+  useEffect(() => {
+    const stored = localStorage.getItem(THEME_KEY);
+    if (stored === "dark" || stored === "light") {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setTheme(stored);
+    }
+  }, []);
+
+  // Apply dark mode to the document only when the plan entitles it.
+  useEffect(() => {
+    const root = document.documentElement;
+    if (darkActive) {
+      root.dataset.theme = "dark";
+    } else {
+      delete root.dataset.theme;
+    }
+  }, [darkActive]);
 
   const active = docs.find((d) => d.id === activeId) ?? docs[0];
 
@@ -219,6 +247,17 @@ export default function Editor() {
     setCopied(true);
     window.clearTimeout(copyTimer.current);
     copyTimer.current = window.setTimeout(() => setCopied(false), 1800);
+  }
+
+  function toggleDarkMode() {
+    if (!canDark) return;
+    const next: Theme = theme === "dark" ? "light" : "dark";
+    setTheme(next);
+    try {
+      localStorage.setItem(THEME_KEY, next);
+    } catch {
+      // Storage may be unavailable; the choice stays in memory for this session.
+    }
   }
 
   const words = wordCount(active.body);
@@ -339,13 +378,41 @@ export default function Editor() {
                 <>
                   <div className="menuOverlay" onClick={() => setMenuOpen(false)} aria-hidden="true" />
                   <div className="userMenu" role="menu">
+                    <div className="menuRow">
+                      <span className="menuRowLabel">
+                        Dark mode
+                        {!canDark && <span className="proPill">Pro</span>}
+                      </span>
+                      <button
+                        type="button"
+                        role="switch"
+                        aria-checked={darkActive}
+                        aria-label="Dark mode"
+                        className={`switch ${darkActive ? "on" : ""}`}
+                        disabled={!canDark}
+                        onClick={toggleDarkMode}
+                      >
+                        <span className="switchKnob" />
+                      </button>
+                    </div>
+                    <div className="menuDivider" />
                     <button type="button" className="menuItem" role="menuitem" onClick={() => setMenuOpen(false)}>
                       Sign in
                     </button>
-                    <button type="button" className="menuItem" role="menuitem" onClick={() => setMenuOpen(false)}>
-                      Go Pro
-                    </button>
-                    <p className="menuHint">Accounts are coming soon.</p>
+                    {plan === "free" ? (
+                      <button type="button" className="menuItem accent" role="menuitem" onClick={() => setPlan("pro")}>
+                        Go Pro
+                      </button>
+                    ) : (
+                      <button type="button" className="menuItem" role="menuitem" onClick={() => setPlan("free")}>
+                        Switch to Free
+                      </button>
+                    )}
+                    <p className="menuHint">
+                      {plan === "free"
+                        ? "Dark mode is a Pro feature."
+                        : "Pro unlocked. Billing is a local preview for now."}
+                    </p>
                   </div>
                 </>
               )}
@@ -366,7 +433,7 @@ export default function Editor() {
               onChange={(e) => updateBody(e.target.value)}
             />
           ) : (
-            <MarkdownView source={active.body} />
+            <MarkdownView source={active.body} theme={darkActive ? "dark" : "light"} />
           )}
         </section>
 

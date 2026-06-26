@@ -6,7 +6,7 @@ A Markdown notepad for agents and humans.
 
 Free users can write transient docs in the browser.
 
-Paid users can save, sync, share, and use the CLI/API.
+Paid users can save, sync, export, share, customize themes, and use the CLI/API.
 
 ## Product
 
