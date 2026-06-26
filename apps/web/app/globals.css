@@ -897,11 +897,11 @@ button {
 
 .shareBar {
   display: flex;
+  flex-shrink: 0;
   align-items: center;
   justify-content: space-between;
   gap: 12px;
-  height: 60px;
-  padding: 0 16px;
+  padding: 18px 16px;
   border-bottom: 1px solid var(--hairline);
 }
 
