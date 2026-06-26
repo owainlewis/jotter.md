@@ -18,25 +18,28 @@ const features = [
 export default function Landing() {
   return (
     <div className="landing">
-      <header className="landingNav">
-        <span className="brand">
-          <span className="brandMark" aria-hidden="true">
-            P
+      <section className="heroSection">
+        <video className="heroVideo" autoPlay muted loop playsInline poster="/bg-poster.jpg">
+          <source src="/bg.mp4" type="video/mp4" />
+        </video>
+        <div className="heroScrim" aria-hidden="true" />
+        <header className="landingNav onDark">
+          <span className="brand">
+            <span className="brandMark" aria-hidden="true">
+              P
+            </span>
+            <span className="brandName">
+              passage<span className="brandExt">.md</span>
+            </span>
           </span>
-          <span className="brandName">
-            passage<span className="brandExt">.md</span>
-          </span>
-        </span>
-        <nav className="landingNavLinks">
-          <a href="#pricing">Pricing</a>
-          <Link className="landingNavCta" href="/write">
-            Start writing
-          </Link>
-        </nav>
-      </header>
-
-      <main className="landingMain">
-        <section className="hero">
+          <nav className="landingNavLinks">
+            <a href="#pricing">Pricing</a>
+            <Link className="landingNavCta" href="/write">
+              Start writing
+            </Link>
+          </nav>
+        </header>
+        <div className="heroInner">
           <h1 className="heroTitle">Minimalist writing for agents and humans</h1>
           <p className="heroSub">
             A calm, minimalist writing app where you and your agents work on the same Markdown documents, right in your
@@ -50,8 +53,10 @@ export default function Landing() {
               Read the story
             </a>
           </div>
-        </section>
+        </div>
+      </section>
 
+      <main className="landingMain">
         <section className="story" id="story">
           <h2 className="sectionTitle">Why passage exists</h2>
           <div className="storyBody">

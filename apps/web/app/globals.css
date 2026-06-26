@@ -978,11 +978,101 @@ button {
   padding: 0 clamp(20px, 5vw, 40px);
 }
 
-.hero {
+.heroSection {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-height: clamp(580px, 94vh, 920px);
+  overflow: hidden;
+  isolation: isolate;
+  background: #16150f;
+}
+
+.heroVideo {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: -2;
+}
+
+.heroScrim {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(
+    180deg,
+    rgba(16, 16, 14, 0.5) 0%,
+    rgba(16, 16, 14, 0.36) 42%,
+    rgba(16, 16, 14, 0.58) 74%,
+    var(--bg) 100%
+  );
+}
+
+.heroSection .landingNav {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+}
+
+.landingNav.onDark .brandName {
+  color: #fff;
+}
+
+.landingNav.onDark .brandExt {
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.landingNav.onDark .landingNavLinks a {
+  color: rgba(255, 255, 255, 0.82);
+}
+
+.landingNav.onDark .landingNavLinks a:hover {
+  color: #fff;
+}
+
+.landingNav.onDark .landingNavCta {
+  color: #fff !important;
+}
+
+.heroInner {
+  position: relative;
+  z-index: 1;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   text-align: center;
-  max-width: 40rem;
+  max-width: 42rem;
   margin: 0 auto;
-  padding: clamp(56px, 11vw, 120px) 0 clamp(48px, 8vw, 88px);
+  padding: clamp(40px, 8vw, 90px) clamp(20px, 5vw, 40px) clamp(72px, 11vw, 130px);
+}
+
+.heroSection .heroTitle {
+  color: #fff;
+}
+
+.heroSection .heroSub {
+  color: rgba(255, 255, 255, 0.82);
+}
+
+.heroSection .btnGhost {
+  color: #fff;
+  border-color: rgba(255, 255, 255, 0.38);
+  background: rgba(255, 255, 255, 0.07);
+}
+
+.heroSection .btnGhost:hover {
+  background: rgba(255, 255, 255, 0.16);
+  border-color: rgba(255, 255, 255, 0.7);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .heroVideo {
+    display: none;
+  }
 }
 
 .heroTitle {
@@ -1065,8 +1155,7 @@ button {
 .story {
   max-width: 38rem;
   margin: 0 auto;
-  padding: clamp(40px, 7vw, 72px) 0;
-  border-top: 1px solid var(--hairline);
+  padding: clamp(48px, 8vw, 88px) 0 clamp(40px, 7vw, 72px);
 }
 
 .storyBody {
