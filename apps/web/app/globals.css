@@ -900,8 +900,8 @@ button {
   align-items: center;
   justify-content: space-between;
   gap: 12px;
-  height: 53px;
-  padding: 0 18px;
+  height: 60px;
+  padding: 0 16px;
   border-bottom: 1px solid var(--hairline);
 }
 
