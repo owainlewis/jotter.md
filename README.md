@@ -23,15 +23,62 @@ Every saved doc is plain Markdown, private by default, and addressable through w
 - [PRD](docs/prd.md)
 - [Architecture](docs/architecture.md)
 - [Issue plan](docs/issues.md)
+- [Goal prompts](docs/goal-prompts.md)
+- [Local MVP demo goal](docs/local-mvp-demo-goal.md)
+
+## Local Development
+
+Prerequisites:
+
+- Node.js 22 or newer.
+- npm 10 or newer.
+
+Install dependencies:
+
+```sh
+npm install
+```
+
+Run the web app:
+
+```sh
+npm run dev:web
+```
+
+The app runs at `http://localhost:3000` by default.
+
+If that port is busy, Next.js prints the alternate local URL.
+
+Run lint:
+
+```sh
+npm run lint
+```
+
+Run tests:
+
+```sh
+npm test
+```
+
+Build the web app:
+
+```sh
+npm run build:web
+```
 
 ## Phases
 
-Phase 1 gets the MVP running locally.
+Phase 1 gets the anonymous editor running locally.
 
-Phase 2 deploys the MVP to GCP.
+Phase 2 deploys the anonymous editor to GCP.
+
+Phase 3 adds personal saved docs, sharing, API, and CLI for Owain's own use.
+
+Phase 4 adds payments and the public paid tier.
 
 ## Repository Status
 
 This repository currently contains the product and implementation plan.
 
-The first implementation task is tracked in GitHub Issues.
+The implementation plan is in [docs/issues.md](docs/issues.md).
