@@ -1,9 +1,17 @@
 "use client";
 
+import DOMPurify from "isomorphic-dompurify";
 import { marked } from "marked";
 import { useEffect, useMemo, useRef } from "react";
 
 marked.setOptions({ gfm: true, breaks: false });
+
+// Rendered Markdown can contain raw HTML, and shared documents are arbitrary
+// input from whoever crafted the link, so sanitize before it ever hits the DOM.
+function renderMarkdown(source: string): string {
+  const html = marked.parse(source) as string;
+  return DOMPurify.sanitize(html, { USE_PROFILES: { html: true } });
+}
 
 let mermaidTheme: string | null = null;
 
@@ -24,7 +32,7 @@ async function loadMermaid(dark: boolean) {
 
 export function MarkdownView({ source, theme = "light" }: { source: string; theme?: "light" | "dark" }) {
   const ref = useRef<HTMLElement>(null);
-  const html = useMemo(() => marked.parse(source) as string, [source]);
+  const html = useMemo(() => renderMarkdown(source), [source]);
 
   // Render fenced ```mermaid blocks into diagrams once the HTML is in the DOM.
   // React owns this subtree via dangerouslySetInnerHTML and may swap nodes on
