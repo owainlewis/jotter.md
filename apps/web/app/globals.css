@@ -422,7 +422,7 @@ button {
   top: calc(100% + 8px);
   right: 0;
   z-index: 31;
-  min-width: 186px;
+  min-width: 224px;
   background: var(--elevated);
   border: 1px solid var(--hairline-strong);
   border-radius: 12px;
@@ -455,6 +455,7 @@ button {
 
 .menuRow {
   display: flex;
+  flex-wrap: nowrap;
   align-items: center;
   justify-content: space-between;
   gap: 12px;
@@ -465,6 +466,7 @@ button {
   display: inline-flex;
   align-items: center;
   gap: 8px;
+  white-space: nowrap;
   font-size: 0.875rem;
   font-weight: 500;
   color: var(--ink);
