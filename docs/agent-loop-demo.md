@@ -2,7 +2,7 @@
 
 ## Topic
 
-Use `jotter.md` to demonstrate how `/goal` keeps a coding agent working until a real product slice is complete.
+Use `passage.md` to demonstrate how `/goal` keeps a coding agent working until a real product slice is complete.
 
 The demo should show the difference between asking an agent to write code once and giving it a clear goal, acceptance criteria, verification steps, and permission to loop until the work is genuinely done.
 
@@ -29,7 +29,7 @@ The useful workflow is a loop.
 
 The agent reads the product plan, implements a scoped slice, runs tests, checks the browser, notices gaps, fixes them, and keeps going until the acceptance criteria are met.
 
-`jotter.md` is a good demo repo because the plan is already written as small product phases with acceptance criteria and verification steps.
+`passage.md` is a good demo repo because the plan is already written as small product phases with acceptance criteria and verification steps.
 
 ## Why This Repo Works
 
@@ -69,7 +69,7 @@ That is the safest live demo because the agent starts from docs and ends with a 
 Use this goal:
 
 ```text
-/goal Scaffold the jotter.md web app and app shell from docs/issues.md issues 1 and 2.
+/goal Scaffold the passage.md web app and app shell from docs/issues.md issues 1 and 2.
 Loop until the app runs locally, lint and tests pass, README setup works, and the desktop/mobile writing surface has been visually checked.
 ```
 
@@ -80,7 +80,7 @@ Phase 1 is the stronger product demo because it shows the full anonymous MVP loo
 Use this goal:
 
 ```text
-/goal Complete Phase 1 of jotter.md from docs/issues.md issues 3 through 9.
+/goal Complete Phase 1 of passage.md from docs/issues.md issues 3 through 9.
 Loop until the anonymous Markdown editor supports editing, local draft persistence, edit/view mode, Markdown preview, Mermaid preview, export, acceptance tests, and visual QA.
 ```
 
@@ -218,7 +218,7 @@ Most agent demos stop after the first code generation pass.
 
 That can look impressive, but it is not how professional software gets shipped.
 
-In this video, I will use a small repo called `jotter.md` and show how a coding agent can move from product docs to a working feature by reading the plan, writing code, running checks, fixing issues, and continuing until the goal is complete.
+In this video, I will use a small repo called `passage.md` and show how a coding agent can move from product docs to a working feature by reading the plan, writing code, running checks, fixing issues, and continuing until the goal is complete.
 
 So, let's get into it.
 

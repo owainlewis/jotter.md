@@ -8,7 +8,7 @@ The goal is not to build a large VC-style SaaS company.
 
 The goal is to build high-quality paid software that can support a solo developer lifestyle business.
 
-Jotter.md is the first product in that direction.
+Passage.md is the first product in that direction.
 
 The broader shift is from a services business toward a product and software business.
 
@@ -106,15 +106,15 @@ It is one of many todo apps.
 
 It still works because it has a clear point of view and people like using it.
 
-Jotter.md should follow that kind of logic.
+Passage.md should follow that kind of logic.
 
 It should not try to win by having the most features.
 
 It should win by being the nicest small tool for a specific job.
 
-## Jotter.md
+## Passage.md
 
-Jotter.md is the first product.
+Passage.md is the first product.
 
 The short description is:
 
@@ -182,9 +182,9 @@ Hosted CLI and API actions should require a paid account.
 
 Free CLI actions should stay local.
 
-For example, `jotter open notes.md` can open a local Markdown file in the browser without uploading it.
+For example, `passage open notes.md` can open a local Markdown file in the browser without uploading it.
 
-For example, `jotter preview notes.md` can open a local Markdown file directly in preview mode.
+For example, `passage preview notes.md` can open a local Markdown file directly in preview mode.
 
 That makes the tool useful without giving away hosted value.
 
@@ -240,7 +240,7 @@ Products should show up naturally in videos.
 
 The best marketing is building real software in public and showing useful workflows.
 
-Jotter.md can be part of content about:
+Passage.md can be part of content about:
 
 - Building a small SaaS with agents.
 - Designing a focused product.
@@ -258,7 +258,7 @@ The stronger engine is audience, trust, demos, and useful public work.
 
 ## Strategic Role
 
-Jotter.md does not need to become the main business.
+Passage.md does not need to become the main business.
 
 It can still be very valuable.
 

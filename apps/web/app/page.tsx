@@ -21,10 +21,10 @@ export default function Landing() {
       <header className="landingNav">
         <span className="brand">
           <span className="brandMark" aria-hidden="true">
-            J
+            P
           </span>
           <span className="brandName">
-            jotter<span className="brandExt">.md</span>
+            passage<span className="brandExt">.md</span>
           </span>
         </span>
         <nav className="landingNavLinks">
@@ -53,7 +53,7 @@ export default function Landing() {
         </section>
 
         <section className="story" id="story">
-          <h2 className="sectionTitle">Why jotter exists</h2>
+          <h2 className="sectionTitle">Why passage exists</h2>
           <div className="storyBody">
             <p>I tried every writing app, and none of them fit.</p>
             <p>
@@ -70,7 +70,7 @@ export default function Landing() {
               So I stripped it all back. One URL. Beautiful Markdown. Write it, share it, and let your agents read and
               edit it too. Private by default, public the moment you send the link.
             </p>
-            <p className="storyClose">That is all jotter is, and nothing else.</p>
+            <p className="storyClose">That is all passage is, and nothing else.</p>
           </div>
         </section>
 
@@ -124,10 +124,10 @@ export default function Landing() {
       <footer className="landingFooter">
         <span className="brand">
           <span className="brandMark" aria-hidden="true">
-            J
+            P
           </span>
           <span className="brandName">
-            jotter<span className="brandExt">.md</span>
+            passage<span className="brandExt">.md</span>
           </span>
         </span>
         <span className="footerTag">A Markdown notepad for agents and humans.</span>

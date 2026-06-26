@@ -8,7 +8,7 @@ import { MarkdownView } from "./markdown-view";
 import { encodeDoc } from "./share";
 
 type Theme = "light" | "dark";
-const THEME_KEY = "jotter.theme.v1";
+const THEME_KEY = "passage.theme.v1";
 
 type Doc = {
   id: string;
@@ -18,12 +18,12 @@ type Doc = {
 
 type Mode = "edit" | "preview";
 
-const STORAGE_KEY = "jotter.documents.v2";
-const ACTIVE_KEY = "jotter.active.v2";
+const STORAGE_KEY = "passage.documents.v2";
+const ACTIVE_KEY = "passage.active.v2";
 
 const welcomeBody = `# Markdown for agents and humans
 
-Welcome to jotter. This is your sample document and quick guide.
+Welcome to passage. This is your sample document and quick guide.
 It is pinned, so it stays at the top, and pinned documents cannot be deleted until you unpin them.
 
 ## Writing
@@ -46,7 +46,7 @@ Edit shows raw Markdown. Preview reads like a finished document.
 
 ## A finished document
 
-Inline \`code\`, **bold**, and *italic* all render cleanly. Links like [jotter.md](https://jotter.md) pick up the accent color.
+Inline \`code\`, **bold**, and *italic* all render cleanly. Links like [passage.md](https://passage.md) pick up the accent color.
 
 > The best tool for thinking in Markdown should disappear while you write.
 
@@ -70,7 +70,7 @@ flowchart LR
 | Browser | Humans   |
 | CLI     | Agents   |
 
-Dark mode lives in the account menu and is part of jotter Pro.
+Dark mode lives in the account menu and is part of passage Pro.
 `;
 
 function newId() {
@@ -318,12 +318,12 @@ export default function Editor() {
     <div className={`workspace ${sidebarOpen ? "withSidebar" : ""}`}>
       <aside className="sidebar" aria-label="Documents" data-open={sidebarOpen}>
         <div className="sidebarHead">
-          <Link className="brand" href="/" aria-label="jotter.md home">
+          <Link className="brand" href="/" aria-label="passage.md home">
             <span className="brandMark" aria-hidden="true">
-              J
+              P
             </span>
             <span className="brandName">
-              jotter<span className="brandExt">.md</span>
+              passage<span className="brandExt">.md</span>
             </span>
           </Link>
         </div>

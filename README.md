@@ -1,8 +1,8 @@
-# jotter.md
+# passage.md
 
 A Markdown notepad for agents and humans.
 
-`jotter.md` is a minimal Markdown writing app with a CLI-first workflow.
+`passage.md` is a minimal Markdown writing app with a CLI-first workflow.
 
 Free users can write transient docs in the browser.
 

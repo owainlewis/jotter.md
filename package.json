@@ -1,15 +1,15 @@
 {
-  "name": "jotter.md",
+  "name": "passage.md",
   "version": "0.0.0",
   "private": true,
   "workspaces": [
     "apps/*"
   ],
   "scripts": {
-    "dev:web": "npm run dev -w @jotter/web",
-    "build:web": "npm run build -w @jotter/web",
-    "lint": "npm run lint -w @jotter/web",
-    "test": "npm run test -w @jotter/web"
+    "dev:web": "npm run dev -w @passage/web",
+    "build:web": "npm run build -w @passage/web",
+    "lint": "npm run lint -w @passage/web",
+    "test": "npm run test -w @passage/web"
   },
   "engines": {
     "node": ">=22.0.0",

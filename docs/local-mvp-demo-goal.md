@@ -44,7 +44,7 @@ It keeps all demo work in a dedicated branch and worktree so it can be removed l
 
 ```md
 /goal
-Build the local anonymous jotter.md MVP for a demo.
+Build the local anonymous passage.md MVP for a demo.
 
 Use `docs/issues.md` Phase 1 issues 3 through 9 as the task list.
 

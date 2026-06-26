@@ -4,7 +4,7 @@ Guidance for AI agents and contributors working in this repository.
 
 ## What This Is
 
-`jotter.md` is a Markdown notepad for agents and humans.
+`passage.md` is a Markdown notepad for agents and humans.
 
 The product is intentionally small.
 
@@ -58,22 +58,22 @@ Use the GitHub CLI, `gh`, for GitHub Issues and Projects work in this repo.
 
 Repository:
 
-- `owainlewis/jotter.md`
-- URL: `https://github.com/owainlewis/jotter.md`
+- `owainlewis/passage.md`
+- URL: `https://github.com/owainlewis/passage.md`
 
 Project:
 
 - Owner: `owainlewis`
 - Project number: `14`
-- Title: `jotter.md MVP`
+- Title: `passage.md MVP`
 - URL: `https://github.com/users/owainlewis/projects/14`
 - Status field options: `Todo`, `In Progress`, `Done`
 
 Useful commands:
 
 ```sh
-gh issue list --repo owainlewis/jotter.md --state all --limit 100
-gh issue view <number> --repo owainlewis/jotter.md
+gh issue list --repo owainlewis/passage.md --state all --limit 100
+gh issue view <number> --repo owainlewis/passage.md
 gh project item-list 14 --owner owainlewis --limit 100
 gh project field-list 14 --owner owainlewis
 ```

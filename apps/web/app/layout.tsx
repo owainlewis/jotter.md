@@ -16,7 +16,7 @@ const mono = IBM_Plex_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "jotter.md",
+  title: "passage.md",
   description: "A Markdown notepad for agents and humans.",
   icons: {
     icon: "/icon.svg"

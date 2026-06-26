@@ -3,7 +3,7 @@
 import { createContext, useCallback, useContext, useEffect, useState } from "react";
 import { type Feature, type Plan, planAllows } from "./features";
 
-const PLAN_KEY = "jotter.plan.v1";
+const PLAN_KEY = "passage.plan.v1";
 
 type EntitlementsValue = {
   plan: Plan;

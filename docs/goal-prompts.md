@@ -197,7 +197,7 @@ It keeps going until lint, tests, and build pass, or until it hits a real blocke
 
 ```md
 /goal
-Make the current jotter.md working tree pass the documented local quality checks.
+Make the current passage.md working tree pass the documented local quality checks.
 
 Do not stop until `npm run lint`, `npm test`, and `npm run build:web` pass, or the work is genuinely blocked and the blocker is reported with evidence.
 
@@ -240,7 +240,7 @@ Do not stop until the app is running locally, desktop and mobile screenshots are
 
 Before changing code, read `AGENTS.md`, `README.md`, and the relevant app files.
 
-Keep the visual style consistent with jotter.md's calm writing surface.
+Keep the visual style consistent with passage.md's calm writing surface.
 
 Run the app locally after changes.
 
@@ -271,7 +271,7 @@ It stops before making product decisions.
 
 ```md
 /goal
-Make jotter.md's planning docs agree with each other.
+Make passage.md's planning docs agree with each other.
 
 Do not stop until `AGENTS.md`, `README.md`, `docs/issues.md`, `docs/prd.md`, and `docs/architecture.md` use consistent phase names, scope boundaries, stack choices, and local commands, or the work is blocked with evidence.
 
@@ -306,7 +306,7 @@ It stops if the issue needs a product decision.
 
 ```md
 /goal
-Make the selected jotter.md issue agent-ready.
+Make the selected passage.md issue agent-ready.
 
 Do not stop until the issue has a clear goal, context, acceptance criteria, verification steps, and explicit out-of-scope notes, or the missing decision is reported with evidence.
 

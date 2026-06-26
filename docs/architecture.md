@@ -1,4 +1,4 @@
-# jotter.md Architecture
+# passage.md Architecture
 
 ## Summary
 
@@ -241,7 +241,7 @@ Anonymous fragment share links can remain free because they do not create server
 
 Public shared docs do not require auth.
 
-Paid public share pages should render without visible Jotter branding, navigation, upgrade prompts, or product marketing.
+Paid public share pages should render without visible Passage branding, navigation, upgrade prompts, or product marketing.
 
 CLI/API token access requires the same entitlement check.
 

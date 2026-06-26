@@ -29,12 +29,12 @@ export default function SharedDocument() {
   return (
     <div className="shareView">
       <header className="shareBar">
-        <Link className="brand" href="/" aria-label="jotter.md">
+        <Link className="brand" href="/" aria-label="passage.md">
           <span className="brandMark" aria-hidden="true">
-            J
+            P
           </span>
           <span className="brandName">
-            jotter<span className="brandExt">.md</span>
+            passage<span className="brandExt">.md</span>
           </span>
         </Link>
         <span className="shareMeta">{body ? "Shared document" : "Read-only"}</span>

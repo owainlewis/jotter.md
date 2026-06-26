@@ -1,8 +1,8 @@
-# jotter.md PRD
+# passage.md PRD
 
 ## Summary
 
-`jotter.md` is a Markdown notepad for agents and humans.
+`passage.md` is a Markdown notepad for agents and humans.
 
 It starts as a clean browser writing surface for transient Markdown.
 
@@ -56,7 +56,7 @@ Secondary users:
 
 ## Positioning
 
-`jotter.md` is a minimal Markdown notepad.
+`passage.md` is a minimal Markdown notepad.
 
 It is browser-first for humans.
 
@@ -171,13 +171,13 @@ Private docs return 404 from public routes.
 Human HTML view:
 
 ```txt
-https://jotter.md/d/share_abc123
+https://passage.md/d/share_abc123
 ```
 
 Raw Markdown view:
 
 ```txt
-https://jotter.md/d/share_abc123.md
+https://passage.md/d/share_abc123.md
 ```
 
 The raw `.md` route is required once sharing exists because agents need stable Markdown context URLs.
@@ -186,7 +186,7 @@ Durable server share links are a paid feature.
 
 Paid share pages should be unbranded.
 
-They should not show Jotter navigation, upgrade prompts, product marketing, or visible app branding.
+They should not show Passage navigation, upgrade prompts, product marketing, or visible app branding.
 
 The page should feel like the user's document.
 
@@ -207,14 +207,14 @@ The shared view renders the document only, with no sidebar and no editor chrome.
 The anonymous share route is:
 
 ```txt
-https://jotter.md/d#<encoded-markdown>
+https://passage.md/d#<encoded-markdown>
 ```
 
 Large documents produce long links, so this model suits the anonymous tier.
 
 Saved documents move to opaque token links once accounts and the server exist.
 
-The server share routes stay `https://jotter.md/d/<token>` and `https://jotter.md/d/<token>.md`.
+The server share routes stay `https://passage.md/d/<token>` and `https://passage.md/d/<token>.md`.
 
 The shared view is the same in both models, so only the data source changes.
 
@@ -286,19 +286,19 @@ It should work well in terminals, shell scripts, and coding-agent sessions.
 Core commands:
 
 ```sh
-jotter auth login
-jotter new "Launch script"
-jotter list
-jotter push script.md
-jotter pull doc_123
-jotter cat doc_123
-jotter append doc_123 notes.md
-jotter replace doc_123 script.md
-jotter share doc_123
-jotter unshare doc_123
-jotter url doc_123
-jotter raw doc_123
-jotter open doc_123
+passage auth login
+passage new "Launch script"
+passage list
+passage push script.md
+passage pull doc_123
+passage cat doc_123
+passage append doc_123 notes.md
+passage replace doc_123 script.md
+passage share doc_123
+passage unshare doc_123
+passage url doc_123
+passage raw doc_123
+passage open doc_123
 ```
 
 The CLI should output plain text by default.
@@ -348,7 +348,7 @@ It should support JSON output for agents and scripts.
 
 ## Success Criteria
 
-- A user can open `jotter.md` locally and write Markdown immediately.
+- A user can open `passage.md` locally and write Markdown immediately.
 - The editor feels calm and uncluttered.
 - A Markdown draft survives refresh in the same browser.
 - A user can switch between edit and view modes without losing text.
