@@ -288,7 +288,13 @@ button {
 
 .topCluster.end {
   justify-self: end;
-  gap: 6px;
+  gap: 4px;
+}
+
+/* Even visual rhythm: the margin compensates for the text buttons' left padding
+   so the toggle, Share, and Export read as equally spaced. */
+.topCluster.end .modeToggle {
+  margin-right: 8px;
 }
 
 .iconButton {
@@ -356,7 +362,7 @@ button {
   color: var(--muted);
   font-size: 0.8125rem;
   font-weight: 500;
-  padding: 6px 10px;
+  padding: 6px 8px;
   border-radius: 7px;
   transition: color 0.12s ease, background 0.12s ease;
 }
@@ -364,6 +370,62 @@ button {
 .textButton:hover {
   color: var(--ink);
   background: rgba(0, 0, 0, 0.05);
+}
+
+/* Account menu */
+.userMenuWrap {
+  position: relative;
+  margin-left: 6px;
+}
+
+.iconButton[aria-expanded="true"] {
+  background: rgba(0, 0, 0, 0.06);
+  color: var(--ink);
+}
+
+.menuOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 30;
+}
+
+.userMenu {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  z-index: 31;
+  min-width: 186px;
+  background: var(--surface);
+  border: 1px solid var(--hairline-strong);
+  border-radius: 12px;
+  box-shadow: 0 12px 32px rgba(27, 26, 23, 0.14), 0 2px 6px rgba(27, 26, 23, 0.08);
+  padding: 6px;
+}
+
+.menuItem {
+  display: block;
+  width: 100%;
+  text-align: left;
+  background: transparent;
+  border: 0;
+  border-radius: 8px;
+  padding: 9px 12px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--ink);
+  transition: background 0.12s ease;
+}
+
+.menuItem:hover {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.menuHint {
+  margin: 4px 0 2px;
+  padding: 8px 12px 4px;
+  border-top: 1px solid var(--hairline);
+  font-size: 0.7rem;
+  color: var(--faint);
 }
 
 /* ----------------------------------------------------------------- writing */

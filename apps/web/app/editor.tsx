@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { snippetOf, titleOf, wordCount } from "./doc-utils";
 import { MarkdownView } from "./markdown-view";
@@ -101,12 +102,22 @@ function DocIcon() {
   );
 }
 
+function UserIcon() {
+  return (
+    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" aria-hidden="true">
+      <circle cx="12" cy="8.5" r="3.4" stroke="currentColor" strokeWidth="1.6" />
+      <path d="M5.5 19.5a6.5 6.5 0 0 1 13 0" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+    </svg>
+  );
+}
+
 export default function Editor() {
   const [docs, setDocs] = useState<Doc[]>(seedDocs);
   const [activeId, setActiveId] = useState<string>("welcome");
   const [mode, setMode] = useState<Mode>("edit");
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [copied, setCopied] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
   const [hydrated, setHydrated] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const copyTimer = useRef<number | undefined>(undefined);
@@ -217,14 +228,14 @@ export default function Editor() {
     <div className={`workspace ${sidebarOpen ? "withSidebar" : ""}`}>
       <aside className="sidebar" aria-label="Documents" data-open={sidebarOpen}>
         <div className="sidebarHead">
-          <span className="brand">
+          <Link className="brand" href="/" aria-label="jotter.md home">
             <span className="brandMark" aria-hidden="true">
               J
             </span>
             <span className="brandName">
               jotter<span className="brandExt">.md</span>
             </span>
-          </span>
+          </Link>
         </div>
         <div className="docListLabel">
           <span>Documents</span>
@@ -313,6 +324,32 @@ export default function Editor() {
             <button type="button" className="textButton" onClick={exportDoc}>
               Export
             </button>
+            <div className="userMenuWrap">
+              <button
+                type="button"
+                className="iconButton userButton"
+                aria-label="Account"
+                aria-haspopup="menu"
+                aria-expanded={menuOpen}
+                onClick={() => setMenuOpen((v) => !v)}
+              >
+                <UserIcon />
+              </button>
+              {menuOpen && (
+                <>
+                  <div className="menuOverlay" onClick={() => setMenuOpen(false)} aria-hidden="true" />
+                  <div className="userMenu" role="menu">
+                    <button type="button" className="menuItem" role="menuitem" onClick={() => setMenuOpen(false)}>
+                      Sign in
+                    </button>
+                    <button type="button" className="menuItem" role="menuitem" onClick={() => setMenuOpen(false)}>
+                      Go Pro
+                    </button>
+                    <p className="menuHint">Accounts are coming soon.</p>
+                  </div>
+                </>
+              )}
+            </div>
           </div>
         </header>
 
