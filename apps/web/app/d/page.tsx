@@ -12,18 +12,18 @@ export default function SharedDocument() {
   useEffect(() => {
     // The document lives in the URL fragment, which is only readable on the
     // client, so this state is populated after mount by design.
-    /* eslint-disable react-hooks/set-state-in-effect */
-    try {
-      const fragment = decodeURIComponent(window.location.hash.slice(1));
-      if (!fragment) {
+    (async () => {
+      try {
+        const fragment = decodeURIComponent(window.location.hash.slice(1));
+        if (!fragment) {
+          setMissing(true);
+          return;
+        }
+        setBody(await decodeDoc(fragment));
+      } catch {
         setMissing(true);
-        return;
       }
-      setBody(decodeDoc(fragment));
-    } catch {
-      setMissing(true);
-    }
-    /* eslint-enable react-hooks/set-state-in-effect */
+    })();
   }, []);
 
   return (

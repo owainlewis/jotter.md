@@ -13,6 +13,7 @@ const THEME_KEY = "jotter.theme.v1";
 type Doc = {
   id: string;
   body: string;
+  pinned?: boolean;
 };
 
 type Mode = "edit" | "preview";
@@ -106,6 +107,32 @@ function DocIcon() {
   );
 }
 
+function SearchIcon() {
+  return (
+    <svg viewBox="0 0 24 24" width="15" height="15" fill="none" aria-hidden="true">
+      <circle cx="11" cy="11" r="6.25" stroke="currentColor" strokeWidth="1.6" />
+      <line x1="15.6" y1="15.6" x2="20" y2="20" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+function PinIcon({ filled }: { filled: boolean }) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      width="13"
+      height="13"
+      fill={filled ? "currentColor" : "none"}
+      stroke="currentColor"
+      strokeWidth="1.5"
+      aria-hidden="true"
+    >
+      <path d="M9 4.5h6l-1 4.6 2.6 2.9V13.4H7.4v-1.4L10 9.1 9 4.5Z" strokeLinejoin="round" />
+      <line x1="12" y1="13.4" x2="12" y2="19.5" strokeLinecap="round" />
+    </svg>
+  );
+}
+
 function UserIcon() {
   return (
     <svg viewBox="0 0 24 24" width="18" height="18" fill="none" aria-hidden="true">
@@ -122,6 +149,7 @@ export default function Editor() {
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [copied, setCopied] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [filter, setFilter] = useState("");
   const [theme, setTheme] = useState<Theme>("light");
   const [hydrated, setHydrated] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -215,7 +243,12 @@ export default function Editor() {
     setDocs((prev) => [doc, ...prev]);
     setActiveId(doc.id);
     setMode("edit");
+    setFilter("");
     requestAnimationFrame(() => textareaRef.current?.focus());
+  }
+
+  function togglePin(id: string) {
+    setDocs((prev) => prev.map((d) => (d.id === id ? { ...d, pinned: !d.pinned } : d)));
   }
 
   function deleteDoc(id: string) {
@@ -238,7 +271,7 @@ export default function Editor() {
   }
 
   async function shareDoc() {
-    const url = `${window.location.origin}/d#${encodeDoc(active.body)}`;
+    const url = `${window.location.origin}/d#${await encodeDoc(active.body)}`;
     try {
       await navigator.clipboard.writeText(url);
     } catch {
@@ -263,6 +296,14 @@ export default function Editor() {
   const words = wordCount(active.body);
   const title = titleOf(active.body);
 
+  // Naive in-memory filter over title and body, with pinned docs floated up.
+  // Array.sort is stable, so unpinned docs keep their existing order.
+  const query = filter.trim().toLowerCase();
+  const visibleDocs = docs
+    .filter((d) => !query || titleOf(d.body).toLowerCase().includes(query) || d.body.toLowerCase().includes(query))
+    .slice()
+    .sort((a, b) => Number(Boolean(b.pinned)) - Number(Boolean(a.pinned)));
+
   return (
     <div className={`workspace ${sidebarOpen ? "withSidebar" : ""}`}>
       <aside className="sidebar" aria-label="Documents" data-open={sidebarOpen}>
@@ -276,18 +317,33 @@ export default function Editor() {
             </span>
           </Link>
         </div>
+        <div className="filterRow">
+          <div className="filterField">
+            <span className="filterIcon">
+              <SearchIcon />
+            </span>
+            <input
+              className="filterInput"
+              type="text"
+              placeholder="Filter"
+              aria-label="Filter documents"
+              value={filter}
+              onChange={(e) => setFilter(e.target.value)}
+            />
+          </div>
+        </div>
         <div className="docListLabel">
           <span>Documents</span>
           <span className="docCount">{docs.length}</span>
         </div>
         <nav className="docList">
-          {docs.map((doc) => {
+          {visibleDocs.map((doc) => {
             const isActive = doc.id === active.id;
             return (
               <button
                 key={doc.id}
                 type="button"
-                className={`docRow ${isActive ? "active" : ""}`}
+                className={`docRow ${isActive ? "active" : ""} ${doc.pinned ? "pinned" : ""}`}
                 onClick={() => setActiveId(doc.id)}
               >
                 <span className="docRowIcon">
@@ -297,23 +353,38 @@ export default function Editor() {
                   <span className="docRowTitle">{titleOf(doc.body)}</span>
                   <span className="docRowSnippet">{snippetOf(doc.body)}</span>
                 </span>
-                {docs.length > 1 && (
+                <span className="docRowActions">
                   <span
-                    className="docRowDelete"
+                    className="docRowPin"
                     role="button"
                     tabIndex={-1}
-                    aria-label="Delete document"
+                    aria-label={doc.pinned ? "Unpin document" : "Pin document"}
                     onClick={(e) => {
                       e.stopPropagation();
-                      deleteDoc(doc.id);
+                      togglePin(doc.id);
                     }}
                   >
-                    ×
+                    <PinIcon filled={Boolean(doc.pinned)} />
                   </span>
-                )}
+                  {docs.length > 1 && (
+                    <span
+                      className="docRowDelete"
+                      role="button"
+                      tabIndex={-1}
+                      aria-label="Delete document"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        deleteDoc(doc.id);
+                      }}
+                    >
+                      ×
+                    </span>
+                  )}
+                </span>
               </button>
             );
           })}
+          {visibleDocs.length === 0 && <p className="docListEmpty">No documents match.</p>}
         </nav>
       </aside>
 

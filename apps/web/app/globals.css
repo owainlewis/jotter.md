@@ -119,7 +119,7 @@ button {
 /* ----------------------------------------------------------------- brand */
 
 .sidebarHead {
-  padding: 16px 16px 4px;
+  padding: 18px 16px 16px;
   min-width: 268px;
 }
 
@@ -287,6 +287,94 @@ button {
 .docRowDelete:hover {
   color: var(--ink);
   background: var(--hover-strong);
+}
+
+.docRowActions {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  flex: 0 0 auto;
+  margin-top: 1px;
+}
+
+.docRowPin {
+  width: 20px;
+  height: 20px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 5px;
+  color: var(--faint);
+  opacity: 0;
+  transition: opacity 0.12s ease, color 0.12s ease, background 0.12s ease;
+}
+
+.docRow:hover .docRowPin {
+  opacity: 1;
+}
+
+.docRow.pinned .docRowPin {
+  opacity: 1;
+  color: var(--accent);
+}
+
+.docRowPin:hover {
+  background: var(--hover-strong);
+  color: var(--accent);
+}
+
+/* Filter */
+
+.filterRow {
+  padding: 0 10px 12px;
+  min-width: 268px;
+}
+
+.filterField {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.filterIcon {
+  position: absolute;
+  left: 10px;
+  display: inline-flex;
+  color: var(--faint);
+  pointer-events: none;
+  transition: color 0.12s ease;
+}
+
+.filterField:focus-within .filterIcon {
+  color: var(--muted);
+}
+
+.filterInput {
+  width: 100%;
+  border: 1px solid var(--hairline);
+  background: var(--bg);
+  border-radius: 9px;
+  padding: 8px 10px 8px 31px;
+  font-family: var(--sans);
+  font-size: 0.8125rem;
+  color: var(--ink);
+  outline: none;
+  transition: border-color 0.12s ease, box-shadow 0.12s ease;
+}
+
+.filterInput::placeholder {
+  color: var(--faint);
+}
+
+.filterInput:focus {
+  border-color: color-mix(in srgb, var(--accent) 55%, var(--hairline));
+  box-shadow: 0 0 0 3px var(--accent-tint);
+}
+
+.docListEmpty {
+  margin: 8px 12px;
+  font-size: 0.8rem;
+  color: var(--muted);
 }
 
 /* -------------------------------------------------------------------- main */

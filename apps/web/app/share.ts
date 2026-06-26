@@ -1,18 +1,33 @@
 // Share links carry the document inside the URL fragment (after `#`).
 // The fragment never reaches a server, so an anonymous draft stays private to
-// whoever holds the link, with zero backend. When server-backed saved docs
-// arrive, the same `/d` view can fetch by id instead of decoding the fragment.
+// whoever holds the link, with zero backend.
+//
+// The payload is deflate-compressed before base64url encoding, which keeps the
+// link far shorter than raw text for real Markdown. A short opaque id (e.g.
+// `/d/abc123`) needs a server lookup and arrives with saved docs (#28); the
+// `/d` view stays the same, only the data source changes.
 
-export function encodeDoc(markdown: string): string {
-  const bytes = new TextEncoder().encode(markdown);
+function toBase64Url(bytes: Uint8Array): string {
   let binary = "";
   for (const byte of bytes) binary += String.fromCharCode(byte);
   return btoa(binary).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
 }
 
-export function decodeDoc(encoded: string): string {
+function fromBase64Url(encoded: string): Uint8Array {
   const base64 = encoded.replace(/-/g, "+").replace(/_/g, "/");
   const binary = atob(base64);
-  const bytes = Uint8Array.from(binary, (char) => char.charCodeAt(0));
-  return new TextDecoder().decode(bytes);
+  return Uint8Array.from(binary, (char) => char.charCodeAt(0));
+}
+
+export async function encodeDoc(markdown: string): Promise<string> {
+  const data = new TextEncoder().encode(markdown);
+  const stream = new Blob([data]).stream().pipeThrough(new CompressionStream("deflate-raw"));
+  const compressed = new Uint8Array(await new Response(stream).arrayBuffer());
+  return toBase64Url(compressed);
+}
+
+export async function decodeDoc(encoded: string): Promise<string> {
+  const bytes = fromBase64Url(encoded);
+  const stream = new Blob([bytes]).stream().pipeThrough(new DecompressionStream("deflate-raw"));
+  return new Response(stream).text();
 }
