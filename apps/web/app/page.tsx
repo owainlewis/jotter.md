@@ -97,9 +97,9 @@ export default function Landing() {
                 $0<span className="planPer"> forever</span>
               </p>
               <ul className="planList">
-                <li>Write, preview, and export Markdown</li>
-                <li>Mermaid diagrams</li>
-                <li>Drafts saved in your browser</li>
+                <li>5 saved documents</li>
+                <li>CLI and API for your agents</li>
+                <li>Preview, Mermaid, and copy</li>
                 <li>Share read-only links</li>
               </ul>
               <Link className="btnPrimary planCta" href="/write">
@@ -111,14 +111,13 @@ export default function Landing() {
                 Pro<span className="planTag">Coming soon</span>
               </p>
               <p className="planPrice">
-                $5<span className="planPer"> / month</span>
+                $6.99<span className="planPer"> / month</span>
               </p>
               <ul className="planList">
                 <li>Everything in Free</li>
-                <li>Saved and synced documents</li>
-                <li>Manage and revoke shares</li>
-                <li>CLI and API for agents</li>
-                <li>Dark mode</li>
+                <li>Unlimited documents</li>
+                <li>Export and raw .md URLs</li>
+                <li>Dark mode and themes</li>
               </ul>
               <span className="btnGhost planCta planCtaDisabled">Coming soon</span>
             </div>
