@@ -9,6 +9,7 @@
     "dev:web": "npm run dev -w @passage/web",
     "build:web": "npm run build -w @passage/web",
     "lint": "npm run lint -w @passage/web",
+    "typecheck": "npm run typecheck -w @passage/web",
     "test": "npm run test -w @passage/web"
   },
   "engines": {

@@ -149,9 +149,9 @@ Free should be useful immediately.
 
 Free should get people hooked on the writing surface.
 
-Free should not require an account.
+Anonymous use should not require an account.
 
-Free should be:
+Anonymous use should be:
 
 - Browser editor.
 - Local transient draft.
@@ -160,25 +160,36 @@ Free should be:
 - Anonymous fragment share links.
 - Local CLI helpers such as opening or previewing a local Markdown file in the browser.
 
-Paid should start when the user wants persistence, portability, agent access, or customization.
+Free accounts should be:
+
+- 5 saved hosted docs.
+- Browser editor.
+- Markdown preview.
+- Copy Markdown.
+- Anonymous fragment share links.
+- CLI access against those 5 hosted docs.
+- Existing doc editing after the 5 doc limit is reached.
+
+Free users should not be able to create a 6th hosted doc until they upgrade or delete an existing saved doc.
+
+Paid should start when the user wants to make passage.md their writing system.
 
 Paid should be:
 
-- Saved docs.
+- Unlimited saved docs with fair use.
 - Sync.
 - Export.
 - Durable public share links.
 - Raw `.md` URLs.
 - Unbranded public share pages.
-- CLI writes to hosted docs.
-- API access.
+- Higher CLI/API limits.
 - Agent skill support.
 - Dark mode.
 - Themes.
 
 The CLI and agent skill can be free to install.
 
-Hosted CLI and API actions should require a paid account.
+Hosted CLI actions should work on the free tier within the 5 doc limit.
 
 Free CLI actions should stay local.
 
@@ -186,25 +197,31 @@ For example, `passage open notes.md` can open a local Markdown file in the brows
 
 For example, `passage preview notes.md` can open a local Markdown file directly in preview mode.
 
-That makes the tool useful without giving away hosted value.
+That makes the tool useful before login.
+
+The product story is:
+
+```txt
+Free gives you the full workflow on 5 docs.
+Pro makes it your writing system.
+```
 
 ## Pricing
 
 The product should feel cheap enough that upgrading is obvious once someone likes it.
 
-The current rough target is:
+Decision date: 2026-06-27.
+
+The current target is:
 
 ```txt
-$5/month
-$49/year
+$6.99/month
+$59/year launch target or $69/year standard target
 ```
 
-Another possible later price is:
+Use one Pro product with monthly and annual billing.
 
-```txt
-$8/month
-$72/year
-```
+The annual price should save roughly twenty to thirty percent.
 
 The early posture should be low-friction.
 
@@ -214,21 +231,25 @@ It should not feel like enterprise software.
 
 It should not need procurement or a team budget.
 
-At $5/month:
+At $6.99/month:
 
 ```txt
-400 customers = $2k/month
-1,000 customers = $5k/month
+286 customers = about $2k/month
+715 customers = about $5k/month
 ```
 
-At $10/month:
+At $59/year:
 
 ```txt
-200 customers = $2k/month
-500 customers = $5k/month
+407 annual customers = about $2k/month equivalent
+1,017 annual customers = about $5k/month equivalent
 ```
 
 Those are hard numbers, but they are not absurd numbers for a creator-led software product.
+
+Internal fair use can be enforced even if the UI says unlimited.
+
+A reasonable starting cap is 10,000 docs and 1 MB per doc.
 
 ## Distribution
 

@@ -19,15 +19,24 @@ function fromBase64Url(encoded: string): Uint8Array {
   return Uint8Array.from(binary, (char) => char.charCodeAt(0));
 }
 
+function streamBytes(bytes: Uint8Array): ReadableStream<BufferSource> {
+  return new ReadableStream<BufferSource>({
+    start(controller) {
+      controller.enqueue(Uint8Array.from(bytes));
+      controller.close();
+    }
+  });
+}
+
 export async function encodeDoc(markdown: string): Promise<string> {
   const data = new TextEncoder().encode(markdown);
-  const stream = new Blob([data]).stream().pipeThrough(new CompressionStream("deflate-raw"));
+  const stream = streamBytes(data).pipeThrough(new CompressionStream("deflate-raw"));
   const compressed = new Uint8Array(await new Response(stream).arrayBuffer());
   return toBase64Url(compressed);
 }
 
 export async function decodeDoc(encoded: string): Promise<string> {
   const bytes = fromBase64Url(encoded);
-  const stream = new Blob([bytes]).stream().pipeThrough(new DecompressionStream("deflate-raw"));
+  const stream = streamBytes(bytes).pipeThrough(new DecompressionStream("deflate-raw"));
   return new Response(stream).text();
 }

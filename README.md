@@ -4,9 +4,11 @@ A Markdown notepad for agents and humans.
 
 `passage.md` is a minimal Markdown writing app with a CLI-first workflow.
 
-Free users can write transient docs in the browser.
+Anonymous users can write transient docs in the browser.
 
-Paid users can save, sync, export, share, customize themes, and use the CLI/API.
+Free accounts can save 5 hosted docs and use the CLI with those docs.
+
+Pro users can save unlimited docs with fair use, sync, export, share, customize themes, and use higher-limit CLI/API workflows.
 
 ## Product
 

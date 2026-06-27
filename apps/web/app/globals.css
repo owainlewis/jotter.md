@@ -217,12 +217,28 @@ button {
   transition: background 0.12s ease;
 }
 
-.docRow:hover {
+.docRow:hover,
+.docRow:focus-within {
   background: var(--hover-soft);
 }
 
 .docRow.active {
   background: var(--accent-tint);
+}
+
+.docRowSelect {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  flex: 1 1 auto;
+  min-width: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
 }
 
 .docRowIcon {
@@ -274,18 +290,25 @@ button {
   align-items: center;
   justify-content: center;
   border-radius: 5px;
+  border: 0;
+  padding: 0;
+  background: transparent;
   color: var(--faint);
+  font: inherit;
   font-size: 1rem;
   line-height: 1;
   opacity: 0;
+  cursor: pointer;
   transition: opacity 0.12s ease, color 0.12s ease, background 0.12s ease;
 }
 
-.docRow:hover .docRowDelete {
+.docRow:hover .docRowDelete,
+.docRow:focus-within .docRowDelete {
   opacity: 1;
 }
 
-.docRowDelete:hover {
+.docRowDelete:hover,
+.docRowDelete:focus-visible {
   color: var(--ink);
   background: var(--hover-strong);
 }
@@ -305,12 +328,17 @@ button {
   align-items: center;
   justify-content: center;
   border-radius: 5px;
+  border: 0;
+  padding: 0;
+  background: transparent;
   color: var(--faint);
   opacity: 0;
+  cursor: pointer;
   transition: opacity 0.12s ease, color 0.12s ease, background 0.12s ease;
 }
 
-.docRow:hover .docRowPin {
+.docRow:hover .docRowPin,
+.docRow:focus-within .docRowPin {
   opacity: 1;
 }
 
@@ -319,7 +347,8 @@ button {
   color: var(--accent);
 }
 
-.docRowPin:hover {
+.docRowPin:hover,
+.docRowPin:focus-visible {
   background: var(--hover-strong);
   color: var(--accent);
 }
@@ -1332,6 +1361,21 @@ button {
 /* ------------------------------------------------------------- responsive */
 
 @media (max-width: 720px) {
+  .topBar {
+    grid-template-columns: auto 1fr;
+    gap: 6px;
+    padding: 0 8px;
+  }
+
+  .topCluster.end {
+    min-width: 0;
+    gap: 2px;
+  }
+
+  .topCluster.end .modeToggle {
+    margin-right: 2px;
+  }
+
   .sidebar {
     position: absolute;
     z-index: 20;
@@ -1342,7 +1386,19 @@ button {
   }
 
   .docTitle {
-    max-width: 16ch;
+    display: none;
+  }
+
+  .modeToggle button {
+    padding: 5px 9px;
+  }
+
+  .textButton {
+    padding: 6px 5px;
+  }
+
+  .userMenuWrap {
+    margin-left: 0;
   }
 
   .writingPane,

@@ -15,11 +15,30 @@ const mono = IBM_Plex_Mono({
   display: "swap"
 });
 
+const siteUrl = "https://passage.md";
+const title = "passage.md";
+const description = "A Markdown notepad for agents and humans.";
+
 export const metadata: Metadata = {
-  title: "passage.md",
-  description: "A Markdown notepad for agents and humans.",
+  metadataBase: new URL(siteUrl),
+  title,
+  description,
   icons: {
     icon: "/icon.svg"
+  },
+  openGraph: {
+    type: "website",
+    url: siteUrl,
+    siteName: title,
+    title,
+    description,
+    images: [{ url: "/bg-poster.jpg", width: 1920, height: 1080, alt: title }]
+  },
+  twitter: {
+    card: "summary_large_image",
+    title,
+    description,
+    images: ["/bg-poster.jpg"]
   }
 };
 

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Brand } from "./brand";
 
 const features = [
   {
@@ -24,14 +25,7 @@ export default function Landing() {
         </video>
         <div className="heroScrim" aria-hidden="true" />
         <header className="landingNav onDark">
-          <span className="brand">
-            <span className="brandMark" aria-hidden="true">
-              P
-            </span>
-            <span className="brandName">
-              passage<span className="brandExt">.md</span>
-            </span>
-          </span>
+          <Brand />
           <nav className="landingNavLinks">
             <a href="#pricing">Go Pro</a>
             <Link className="landingNavCta" href="/write">
@@ -126,14 +120,7 @@ export default function Landing() {
       </main>
 
       <footer className="landingFooter">
-        <span className="brand">
-          <span className="brandMark" aria-hidden="true">
-            P
-          </span>
-          <span className="brandName">
-            passage<span className="brandExt">.md</span>
-          </span>
-        </span>
+        <Brand />
         <span className="footerTag">A Markdown notepad for agents and humans.</span>
       </footer>
     </div>
