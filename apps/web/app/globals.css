@@ -645,6 +645,7 @@ button {
   outline: none;
   resize: none;
   overflow: hidden;
+  field-sizing: content;
   background: transparent;
   color: var(--ink-soft);
   caret-color: var(--accent);

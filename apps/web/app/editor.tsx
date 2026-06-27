@@ -220,9 +220,13 @@ export default function Editor() {
   const active = docs.find((d) => d.id === activeId) ?? docs[0];
 
   // Grow the textarea with its content so the pane scrolls as one surface.
+  // Modern browsers do this natively with `field-sizing: content`, which avoids
+  // the per-keystroke height thrashing that left a ghost caret in Chrome. Only
+  // fall back to JS resizing where field-sizing is unsupported.
   useEffect(() => {
     const el = textareaRef.current;
     if (!el || mode !== "edit") return;
+    if (typeof CSS !== "undefined" && CSS.supports?.("field-sizing", "content")) return;
     el.style.height = "auto";
     el.style.height = `${el.scrollHeight}px`;
   }, [active.body, mode, activeId]);
