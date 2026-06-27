@@ -22,8 +22,8 @@ This file is only repo memory.
 
 ## Phase 3: Email Auth
 
-- [ ] Password reset emails.
-- [ ] Magic link login.
+- [ ] [#39 Add password reset emails](https://github.com/owainlewis/passage.md/issues/39)
+- [ ] [#40 Add magic-link sign-in](https://github.com/owainlewis/passage.md/issues/40)
 
 ## Phase 4: Pro Accounts
 
@@ -45,5 +45,4 @@ This file is only repo memory.
 
 ## Needs Cleanup
 
-- Create Phase 3 issues for password reset emails and magic link login.
-- Update phase labels on GitHub to match this plan.
+- None.
