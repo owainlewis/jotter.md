@@ -106,9 +106,11 @@ It is not a docs platform with heavy permissions in V1.
 
 - Add Stripe Checkout and Billing.
 - Add paid entitlements.
-- Let paid users save, sync, export, share, and use the CLI/API.
+- Let free accounts save up to 5 hosted docs.
+- Let free accounts use the CLI against those 5 hosted docs.
+- Let paid users save more docs, sync, export, share, and use higher-limit CLI/API workflows.
 - Add paid appearance features such as dark mode and themes.
-- Keep anonymous users limited to transient browser drafts.
+- Keep anonymous users limited to transient browser drafts and anonymous fragment sharing.
 
 ## Core UX
 
@@ -222,26 +224,68 @@ Shared HTML must be sanitized before this ships publicly because a crafted link 
 
 ## Pricing And Storage
 
-The free tier writes, previews, copies Markdown, and can use anonymous fragment share links in the browser with no account.
+Decision date: 2026-06-27.
 
-The paid tier saves documents on the server, syncs them, exports files, manages durable share links, and unlocks the CLI and API.
+The pricing model is:
 
-Paid users also get minor product comforts:
+| Plan | Price | Boundary |
+| --- | --- | --- |
+| Free | `$0` | 5 saved hosted docs. |
+| Pro monthly | `$6.99/month` | Unlimited saved docs with fair use. |
+| Pro annual | `$59/year` launch target, or `$69/year` standard target. | Same as Pro monthly with a discount. |
 
+The free tier should include the full basic workflow on a small number of docs.
+
+Free users can:
+
+- Write Markdown in the browser.
+- Preview Markdown.
+- Copy Markdown.
+- Keep local drafts.
+- Save up to 5 hosted docs.
+- Use the CLI with those 5 hosted docs.
+- Use anonymous fragment share links.
+- Edit existing saved docs after reaching the 5 doc limit.
+
+Free users cannot create a 6th hosted doc until they upgrade or delete an existing saved doc.
+
+The paid tier starts when the user wants to make passage.md their writing system.
+
+Pro users get:
+
+- Unlimited saved docs with fair use.
+- Sync.
 - Dark mode.
 - Additional writing themes.
 - File export.
 - Durable public share links.
 - Raw `.md` share URLs for agents.
+- Higher CLI/API limits.
+- Agent skill support.
 - Unbranded public share pages.
 
 Do not make free mode feel broken.
 
-Free mode should be useful as a transient browser notepad.
+Free mode should be useful as a small hosted writing workflow.
 
-Paid mode starts when users want persistence, portability, agent access, or customization.
+Paid mode starts when users want more than 5 docs, durable publishing, higher agent usage, portability, or customization.
 
 The pricing posture should be cheap enough that upgrading feels obvious once someone likes the app.
+
+The product story is:
+
+```txt
+Free gives you the full workflow on 5 docs.
+Pro makes it your writing system.
+```
+
+The CLI is part of the product wedge.
+
+Do not hide the CLI entirely behind Pro.
+
+Free CLI support should prove the agent workflow on the same 5 hosted docs.
+
+Pro should expand the volume, limits, sharing, export, and customization.
 
 The model is a small useful product with a low monthly price, high daily utility, and quiet stickiness from saved docs and agent workflows.
 
@@ -253,11 +297,13 @@ Billing uses Stripe Checkout and Stripe Billing.
 
 Offer one Pro product with a monthly price and an annual price.
 
-The annual price should save about twenty to twenty five percent.
+The annual price should save about twenty to thirty percent.
 
 A one time lifetime price is an optional launch promotion.
 
-A working target is five dollars monthly or forty eight dollars annual.
+Internal fair use can be enforced even if the UI says unlimited.
+
+A reasonable internal Pro cap is 10,000 docs and a 1 MB limit per doc until real usage suggests otherwise.
 
 Set limits as anti abuse guardrails, not as a storage meter.
 
@@ -277,11 +323,15 @@ Price on access and value, not on bytes.
 
 ## CLI
 
-The CLI is part of the saved-doc product, not the anonymous scratchpad.
+The CLI is part of the saved-doc product.
 
 It should arrive in Phase 3 after the document API exists.
 
 It should work well in terminals, shell scripts, and coding-agent sessions.
+
+Free accounts can use the CLI with their 5 hosted docs.
+
+Pro accounts get higher CLI/API limits and more hosted docs.
 
 Core commands:
 

@@ -18,10 +18,14 @@ export function EntitlementsProvider({ children }: { children: React.ReactNode }
 
   // Hydrate the plan after mount so SSR and the first client render match.
   useEffect(() => {
-    const stored = localStorage.getItem(PLAN_KEY);
-    if (stored === "pro" || stored === "free") {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
-      setPlanState(stored);
+    try {
+      const stored = localStorage.getItem(PLAN_KEY);
+      if (stored === "pro" || stored === "free") {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
+        setPlanState(stored);
+      }
+    } catch {
+      // Storage may be blocked; the default free plan stays in memory.
     }
   }, []);
 

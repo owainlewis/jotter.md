@@ -1,9 +1,10 @@
 "use client";
 
-import Link from "next/link";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { Brand } from "./brand";
 import { snippetOf, titleOf, wordCount } from "./doc-utils";
 import { useEntitlements } from "./entitlements";
+import { DocIcon, PinIcon, PlusIcon, SearchIcon, SidebarIcon, UserIcon } from "./icons";
 import { MarkdownView } from "./markdown-view";
 import { encodeDoc } from "./share";
 
@@ -17,9 +18,17 @@ type Doc = {
 };
 
 type Mode = "edit" | "preview";
+type ShareState = "idle" | "copied" | "toolong";
 
 const STORAGE_KEY = "passage.documents.v2";
 const ACTIVE_KEY = "passage.active.v2";
+
+// A share link carries the whole document in its URL fragment. Past a point the
+// link grows too long to paste reliably (chat apps, email clients, and some
+// browsers truncate very long URLs), so guard the length and tell the user
+// rather than handing back a link that silently breaks on paste. Saved-doc IDs
+// (#28) will lift this ceiling by moving the body server-side.
+const MAX_SHARE_URL_LENGTH = 16000;
 
 const welcomeBody = `# Markdown for agents and humans
 
@@ -84,78 +93,12 @@ function seedDocs(): Doc[] {
   return [{ id: "welcome", body: welcomeBody, pinned: true }];
 }
 
-function SidebarIcon() {
-  return (
-    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" aria-hidden="true">
-      <rect x="3" y="4" width="18" height="16" rx="2.5" stroke="currentColor" strokeWidth="1.6" />
-      <line x1="9.5" y1="4" x2="9.5" y2="20" stroke="currentColor" strokeWidth="1.6" />
-    </svg>
-  );
-}
-
-function PlusIcon() {
-  return (
-    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" aria-hidden="true">
-      <line x1="12" y1="5" x2="12" y2="19" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" />
-      <line x1="5" y1="12" x2="19" y2="12" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" />
-    </svg>
-  );
-}
-
-function DocIcon() {
-  return (
-    <svg viewBox="0 0 24 24" width="15" height="15" fill="none" aria-hidden="true">
-      <path
-        d="M6 3.5h7L18 8v12a.5.5 0 0 1-.5.5h-11A.5.5 0 0 1 6 20V4a.5.5 0 0 1 .5-.5Z"
-        stroke="currentColor"
-        strokeWidth="1.5"
-      />
-      <path d="M13 3.5V8h4.5" stroke="currentColor" strokeWidth="1.5" />
-    </svg>
-  );
-}
-
-function SearchIcon() {
-  return (
-    <svg viewBox="0 0 24 24" width="15" height="15" fill="none" aria-hidden="true">
-      <circle cx="11" cy="11" r="6.25" stroke="currentColor" strokeWidth="1.6" />
-      <line x1="15.6" y1="15.6" x2="20" y2="20" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
-    </svg>
-  );
-}
-
-function PinIcon({ filled }: { filled: boolean }) {
-  return (
-    <svg
-      viewBox="0 0 24 24"
-      width="13"
-      height="13"
-      fill={filled ? "currentColor" : "none"}
-      stroke="currentColor"
-      strokeWidth="1.5"
-      aria-hidden="true"
-    >
-      <path d="M9 4.5h6l-1 4.6 2.6 2.9V13.4H7.4v-1.4L10 9.1 9 4.5Z" strokeLinejoin="round" />
-      <line x1="12" y1="13.4" x2="12" y2="19.5" strokeLinecap="round" />
-    </svg>
-  );
-}
-
-function UserIcon() {
-  return (
-    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" aria-hidden="true">
-      <circle cx="12" cy="8.5" r="3.4" stroke="currentColor" strokeWidth="1.6" />
-      <path d="M5.5 19.5a6.5 6.5 0 0 1 13 0" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
-    </svg>
-  );
-}
-
 export default function Editor() {
   const [docs, setDocs] = useState<Doc[]>(seedDocs);
   const [activeId, setActiveId] = useState<string>("welcome");
   const [mode, setMode] = useState<Mode>("preview");
   const [sidebarOpen, setSidebarOpen] = useState(true);
-  const [copied, setCopied] = useState(false);
+  const [shareState, setShareState] = useState<ShareState>("idle");
   const [menuOpen, setMenuOpen] = useState(false);
   const [filter, setFilter] = useState("");
   const [theme, setTheme] = useState<Theme>("light");
@@ -166,6 +109,13 @@ export default function Editor() {
   const { plan, setPlan, can } = useEntitlements();
   const canDark = can("darkMode");
   const darkActive = canDark && theme === "dark";
+
+  useEffect(() => {
+    if (window.matchMedia?.("(max-width: 720px)").matches) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setSidebarOpen(false);
+    }
+  }, []);
 
   // Load persisted state after mount so SSR and the first client render match.
   useEffect(() => {
@@ -200,10 +150,14 @@ export default function Editor() {
 
   // Hydrate the saved theme preference after mount.
   useEffect(() => {
-    const stored = localStorage.getItem(THEME_KEY);
-    if (stored === "dark" || stored === "light") {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
-      setTheme(stored);
+    try {
+      const stored = localStorage.getItem(THEME_KEY);
+      if (stored === "dark" || stored === "light") {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
+        setTheme(stored);
+      }
+    } catch {
+      // Storage may be blocked; keep the default theme.
     }
   }, []);
 
@@ -286,14 +240,19 @@ export default function Editor() {
 
   async function shareDoc() {
     const url = `${window.location.origin}/d#${await encodeDoc(active.body)}`;
+    window.clearTimeout(copyTimer.current);
+    if (url.length > MAX_SHARE_URL_LENGTH) {
+      setShareState("toolong");
+      copyTimer.current = window.setTimeout(() => setShareState("idle"), 2400);
+      return;
+    }
     try {
       await navigator.clipboard.writeText(url);
     } catch {
       window.prompt("Copy this share link", url);
     }
-    setCopied(true);
-    window.clearTimeout(copyTimer.current);
-    copyTimer.current = window.setTimeout(() => setCopied(false), 1800);
+    setShareState("copied");
+    copyTimer.current = window.setTimeout(() => setShareState("idle"), 1800);
   }
 
   function toggleDarkMode() {
@@ -322,14 +281,7 @@ export default function Editor() {
     <div className={`workspace ${sidebarOpen ? "withSidebar" : ""}`}>
       <aside className="sidebar" aria-label="Documents" data-open={sidebarOpen}>
         <div className="sidebarHead">
-          <Link className="brand" href="/" aria-label="passage.md home">
-            <span className="brandMark" aria-hidden="true">
-              P
-            </span>
-            <span className="brandName">
-              passage<span className="brandExt">.md</span>
-            </span>
-          </Link>
+          <Brand href="/" />
         </div>
         <div className="filterRow">
           <div className="filterField">
@@ -354,48 +306,40 @@ export default function Editor() {
           {visibleDocs.map((doc) => {
             const isActive = doc.id === active.id;
             return (
-              <button
+              <div
                 key={doc.id}
-                type="button"
                 className={`docRow ${isActive ? "active" : ""} ${doc.pinned ? "pinned" : ""}`}
-                onClick={() => setActiveId(doc.id)}
               >
-                <span className="docRowIcon">
-                  <DocIcon />
-                </span>
-                <span className="docRowText">
-                  <span className="docRowTitle">{titleOf(doc.body)}</span>
-                  <span className="docRowSnippet">{snippetOf(doc.body)}</span>
-                </span>
+                <button type="button" className="docRowSelect" onClick={() => setActiveId(doc.id)}>
+                  <span className="docRowIcon">
+                    <DocIcon />
+                  </span>
+                  <span className="docRowText">
+                    <span className="docRowTitle">{titleOf(doc.body)}</span>
+                    <span className="docRowSnippet">{snippetOf(doc.body)}</span>
+                  </span>
+                </button>
                 <span className="docRowActions">
-                  <span
+                  <button
+                    type="button"
                     className="docRowPin"
-                    role="button"
-                    tabIndex={-1}
                     aria-label={doc.pinned ? "Unpin document" : "Pin document"}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      togglePin(doc.id);
-                    }}
+                    onClick={() => togglePin(doc.id)}
                   >
                     <PinIcon filled={Boolean(doc.pinned)} />
-                  </span>
+                  </button>
                   {docs.length > 1 && !doc.pinned && (
-                    <span
+                    <button
+                      type="button"
                       className="docRowDelete"
-                      role="button"
-                      tabIndex={-1}
                       aria-label="Delete document"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        deleteDoc(doc.id);
-                      }}
+                      onClick={() => deleteDoc(doc.id)}
                     >
                       ×
-                    </span>
+                    </button>
                   )}
                 </span>
-              </button>
+              </div>
             );
           })}
           {visibleDocs.length === 0 && <p className="docListEmpty">No documents match.</p>}
@@ -442,8 +386,13 @@ export default function Editor() {
                 Preview
               </button>
             </div>
-            <button type="button" className="textButton" onClick={shareDoc}>
-              {copied ? "Copied" : "Share"}
+            <button
+              type="button"
+              className="textButton"
+              onClick={shareDoc}
+              title={shareState === "toolong" ? "This document is too long to share as a link" : undefined}
+            >
+              {shareState === "copied" ? "Copied" : shareState === "toolong" ? "Too long" : "Share"}
             </button>
             <button type="button" className="textButton" onClick={exportDoc}>
               Export

@@ -4,13 +4,17 @@ Guidance for AI agents and contributors working in this repository.
 
 ## What This Is
 
-`passage.md` is a Markdown notepad for agents and humans.
+`passage.md` is a Markdown notepad for people writing with AI agents and humans.
 
 The product is intentionally small.
 
 Free users can write transient Markdown in the browser.
 
 Paid users can save docs, share docs by URL, and use the CLI/API.
+
+V1 AI support means plain Markdown storage, raw `.md` URLs, API access, and CLI access that agents can consume.
+
+In-app AI writing and real-time collaboration are out of scope unless GitHub issues explicitly add them.
 
 ## Product Principles
 
@@ -40,7 +44,8 @@ Paid users can save docs, share docs by URL, and use the CLI/API.
 - Billing: Stripe Checkout and Billing.
 - Editor: CodeMirror 6.
 - Markdown preview: remark, rehype, remark-gfm, Mermaid.
-- Deployment: GCP Cloud Run and managed Postgres.
+- Deployment: one Go server/container on GCP Cloud Run with the static Next.js frontend embedded.
+- Database: local Postgres in development and managed Postgres in production via `DATABASE_URL`.
 
 ## Quality Bar
 
@@ -80,9 +85,20 @@ gh project field-list 14 --owner owainlewis
 
 Treat GitHub Issues and the project board as the live execution tracker.
 
-The project board is the single source of truth for issues.
+The project board is the single source of truth for priority and status.
+
+The GitHub issue body is the single source of truth for scope, acceptance criteria, dependencies, verification, and out-of-scope notes.
 
 There is no local issue plan file.
+
+When picking work:
+
+- Prefer `Todo` items with the `agent-ready` label.
+- Skip `blocked` items unless Owain explicitly asks for them.
+- Read the full issue before changing code.
+- Honor dependencies listed in the issue body.
+- Move only the active issue to `In Progress`.
+- Keep finished evidence in the issue or PR, not in a local roadmap file.
 
 ## Writing Style
 

@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { Brand } from "../brand";
 import { MarkdownView } from "../markdown-view";
 import { decodeDoc } from "../share";
 
@@ -29,14 +30,7 @@ export default function SharedDocument() {
   return (
     <div className="shareView">
       <header className="shareBar">
-        <Link className="brand" href="/" aria-label="passage.md">
-          <span className="brandMark" aria-hidden="true">
-            P
-          </span>
-          <span className="brandName">
-            passage<span className="brandExt">.md</span>
-          </span>
-        </Link>
+        <Brand href="/" ariaLabel="passage.md" />
         <span className="shareMeta">{body ? "Shared document" : "Read-only"}</span>
       </header>
 

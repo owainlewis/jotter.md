@@ -2,7 +2,7 @@ export function titleOf(body: string): string {
   for (const raw of body.split("\n")) {
     const line = raw.trim();
     if (!line) continue;
-    return line.replace(/^#{1,6}\s+/, "").replace(/[*_`>#-]/g, "").trim() || "Untitled";
+    return line.replace(/^#{1,6}\s+/, "").replace(/[*_`>#]/g, "").trim() || "Untitled";
   }
   return "Untitled";
 }
